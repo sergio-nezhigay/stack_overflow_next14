@@ -1,9 +1,11 @@
 import React from "react";
 import { ClerkProvider } from "@clerk/nextjs";
+// eslint-disable-next-line camelcase
 import { Inter, Space_Grotesk } from "next/font/google";
 import type { Metadata } from "next";
 
 import "./globals.css";
+import { ThemeProvider } from "@/context/ThemeProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -21,18 +23,6 @@ export const metadata: Metadata = {
   description:
     "A communtity driven platform for asking and answering questions about",
   icons: { icon: "/assets/images/site-logo.svg" },
-  // canonical: "https://clerk.dev",
-  // openGraph: {
-  //   url: "https://clerk.dev",
-  //   title: "Clerk NextJS",
-  //   description: "Clerk NextJS",
-  //   site_name: "Clerk NextJS",
-  // },
-  // twitter: {
-  //   handle: "@clerk",
-  //   site: "@clerk",
-  //   cardType: "summary_large_image",
-  // },
 };
 
 export default function RootLayout({
@@ -41,19 +31,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider
-      appearance={{
-        elements: {
-          formButtonPrimary: "primart-gradients",
-          footerActionLink: "primart-text-gradients hover: text-primary-500",
-        },
-      }}
-    >
-      <html lang="en">
-        <body className={`${inter.variable} ${spaceGrotesk.variable}`}>
-          {children}
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en">
+      <body className={`${inter.variable} ${spaceGrotesk.variable}`}>
+        <ClerkProvider
+          appearance={{
+            elements: {
+              formButtonPrimary: "primart-gradients",
+              footerActionLink:
+                "primart-text-gradients hover: text-primary-500",
+            },
+          }}
+        >
+          <ThemeProvider>{children} </ThemeProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }
