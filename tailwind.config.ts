@@ -13,6 +13,8 @@ module.exports = {
       padding: "2rem",
       screens: {
         "2xl": "1400px",
+        xl: "1024px",
+        md: "640px",
       },
     },
     extend: {
@@ -55,7 +57,11 @@ module.exports = {
         "auth-light": "url('/assets/images/auth-light.png')",
       },
       screens: {
-        xs: "420px",
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
+        "2xl": "1536px",
       },
       keyframes: {
         "accordion-down": {
