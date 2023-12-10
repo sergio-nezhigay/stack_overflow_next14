@@ -1,7 +1,7 @@
 import React from "react";
 import RenderTag from "../shared/RenderTag";
 import Link from "next/link";
-import { getTimestamp } from "@/lib/utils";
+import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
 import Metric from "../shared/Metric";
 
 interface QuestionProps {
@@ -17,7 +17,7 @@ interface QuestionProps {
     picture: string;
     clerkId: string;
   };
-  upvotes: number;
+  upvotes: Array<object>;
   views: number;
   answers: Array<object>;
   createdAt: Date;
@@ -57,10 +57,10 @@ function QuestionCard({
         />
         <div className="flex flex-wrap gap-[9px]">
           <Metric
-            imgUrl="/assets/icons/chevron-right.svg"
-            alt="chevron right"
-            value={upvotes.toString()}
-            title="Votes"
+            imgUrl="/assets/icons/like.svg"
+            alt="Upvotes"
+            value={formatAndDivideNumber(upvotes.length)}
+            title=" Votes"
             textStyles="small-medium text-dark400_light800"
           />
           <Metric

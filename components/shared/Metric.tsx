@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -11,7 +12,7 @@ interface MetricProps {
   isAuthor?: boolean;
 }
 
-function Metric({
+const Metric = ({
   imgUrl,
   alt,
   value,
@@ -19,20 +20,24 @@ function Metric({
   href,
   textStyles,
   isAuthor,
-}: MetricProps) {
-  const children = (
+}: MetricProps) => {
+  const metricContent = (
     <>
-      {isAuthor ? (
-        <div className="mr-0.5 h-5 w-5 rounded-full bg-slate-400"></div>
-      ) : (
-        <div className="h-4 w-4 bg-red-200"></div>
-      )}
+      <Image
+        src={imgUrl}
+        width={16}
+        height={16}
+        alt={alt}
+        className={`object-contain ${href ? "rounded-full" : ""}`}
+      />
+
       <p className={`${textStyles} flex items-center gap-1`}>
         {value}
+
         <span
-          className={`${
-            isAuthor ? "max-sm:hidden  " : " "
-          } small-regular line-clamp-1 block `}
+          className={`small-regular line-clamp-1 ${
+            isAuthor ? "max-sm:hidden" : ""
+          }`}
         >
           {title}
         </span>
@@ -42,13 +47,13 @@ function Metric({
 
   if (href) {
     return (
-      <Link className="flex items-center gap-0.5" href={href}>
-        {children}
+      <Link href={href} className="flex-center  gap-1">
+        {metricContent}
       </Link>
     );
-  } else {
-    return <div className="flex items-center gap-0.5">{children}</div>;
   }
-}
+
+  return <div className="flex-center flex-wrap gap-1">{metricContent}</div>;
+};
 
 export default Metric;
