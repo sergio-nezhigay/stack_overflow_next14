@@ -6,7 +6,7 @@ import { HomePageFilters } from "@/constants/filters";
 import { Button } from "../ui/button";
 
 function HomeFilters() {
-  const [active, setActive] = useState("Newest");
+  const [active] = useState("Newest");
 
   return (
     <div className="mt-10 flex flex-wrap gap-3 max-md:hidden">
