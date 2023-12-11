@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import React, { useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 interface CustomInputProps {
   route: string;
