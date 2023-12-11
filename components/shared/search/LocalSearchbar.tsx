@@ -20,8 +20,8 @@ const LocalSearchbar = ({
   placeholder,
   otherClasses,
 }: CustomInputProps) => {
-  const router = useRouter();
-  const pathname = usePathname();
+  // const router = useRouter();
+  // const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const query = searchParams.get("q");
