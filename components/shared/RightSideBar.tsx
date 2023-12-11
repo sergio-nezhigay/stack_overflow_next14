@@ -14,7 +14,7 @@ const popularTags = [
 
 function RightSideBar() {
   return (
-    <section className="background-light900_dark200 light-border custom-scrollbar sticky right-0 top-0 h-screen w-[350px] flex-col overflow-y-auto  border-l px-[26px] pb-[50px] pt-[164px] shadow-light-300 dark:shadow-none max-xl:hidden lg:flex">
+    <section className="background-light900_dark200 light-border custom-scrollbar sticky right-0 top-0 flex h-screen w-[350px] flex-col overflow-y-auto border-l p-6 pt-36 shadow-light-300 dark:shadow-none max-xl:hidden">
       <div className="mb-[60px] flex flex-col">
         <h2 className="h3-bold text-dark200_light900 mb-[26px]">Hot Network</h2>
         <div className="flex flex-col gap-[30px]">

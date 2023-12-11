@@ -9,18 +9,11 @@ import QuestionCard from "@/components/cards/QuestionCard";
 import NoResult from "@/components/shared/NoResult";
 import { getQuestions } from "@/lib/actions/question.action";
 
-const isUnderConstruction = true;
-
 export default async function Home() {
   const result = await getQuestions({});
-  console.log("🚀 ~ file: page.tsx:15 ~ result:", result.questions);
+
   return (
     <>
-      {isUnderConstruction && (
-        <div className="mb-5 bg-red-500 p-4 text-center text-white ">
-          This site is under construction. Please check back later!
-        </div>
-      )}
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
         <h1 className="h1-bold text-dark100_light900">All Questions</h1>
 
