@@ -1,4 +1,4 @@
-import { QUESTIONS, TAGS } from "@/constants";
+import { QUESTIONS } from "@/constants";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
