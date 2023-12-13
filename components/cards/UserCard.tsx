@@ -17,20 +17,12 @@ interface Props {
 
 async function UserCard({ user }: Props) {
   const { clerkId, _id, picture, name, username } = user;
-  console.log(
-    "clerkId, _id, picture, name, username",
-    clerkId,
-    _id,
-    picture,
-    name,
-    username
-  );
 
   const interactedTags = await getTopInteractedTags({ userId: user._id });
   return (
     <Link
       href={`/profile/${clerkId}`}
-      className="shadow-light100_darknone max-xs:min-w-full xs:w-[260px] w-full"
+      className="shadow-light100_darknone max-xs:min-w-full xs:w-full w-[260px]"
     >
       <article className="background-light900_dark200 light-border flex w-full flex-col items-center justify-center rounded-2xl border p-8">
         <Image
