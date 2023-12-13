@@ -1,12 +1,28 @@
 "use server";
 
-import { connectToDatabase } from "../mongoose";
+import { connectToDatabase, findById } from "../mongoose";
 import Question from "@/database/question.model";
 import Tag from "@/database/tag.model";
-import { CreateQuestionParams, GetQuestionsParams } from "./shared.types";
+import {
+  CreateQuestionParams,
+  GetQuestionByIdParams,
+  GetQuestionsParams,
+} from "./shared.types";
 import User from "@/database/user.model";
 import { FilterQuery } from "mongoose";
 import { revalidatePath } from "next/cache";
+
+export async function getQuestionById(params: GetQuestionByIdParams) {
+  try {
+    connectToDatabase();
+    const { questionId } = params;
+    const question = await Question.findById(questionId);
+    return { question };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
 
 export async function getQuestions(params: GetQuestionsParams) {
   try {

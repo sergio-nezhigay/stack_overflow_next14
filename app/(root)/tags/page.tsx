@@ -2,7 +2,6 @@ import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
 import Filter from "@/components/shared/Filter";
 import { TagFilters } from "@/constants/filters";
 import NoResult from "@/components/shared/NoResult";
-import UserCard from "@/components/cards/UserCard";
 import { getAllTags } from "@/lib/actions/tag.actions";
 import TagCard from "@/components/cards/TagCard";
 

@@ -3,6 +3,7 @@ import RenderTag from "../shared/RenderTag";
 
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
 import Metric from "../shared/Metric";
+import Link from "next/link";
 
 interface QuestionProps {
   _id: string;
@@ -37,9 +38,11 @@ function QuestionCard({
 }: QuestionProps) {
   return (
     <div key={_id} className="card-wrapper rounded-[10px] p-9 sm:px-11">
-      <h3 className="text-dark200_light900 h3-semibold mb-[14px] line-clamp-1">
-        {title}
-      </h3>
+      <Link href={`/question/${_id}`}>
+        <h3 className="text-dark200_light900 h3-semibold mb-[14px] line-clamp-1">
+          {title}
+        </h3>
+      </Link>
       <div className="mt-3.5 flex flex-wrap gap-2">
         {tags.map((tag) => (
           <RenderTag key={tag._id} _id={tag._id} name={tag.name} />
