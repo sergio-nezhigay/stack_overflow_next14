@@ -6,7 +6,7 @@ import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
 import AllAnswers from "@/components/shared/AllAnswers";
 import ParseHTML from "@/components/shared/ParseHTML";
 
-// import Answer from "@/components/forms/Answer";
+import Answer from "@/components/forms/Answer";
 import { auth } from "@clerk/nextjs";
 import { getUserById } from "@/lib/actions/user.action";
 import RenderTag from "@/components/shared/RenderTag";
@@ -90,11 +90,11 @@ const Page = async ({ params }: any) => {
         userId={JSON.stringify(mongoUser._id)}
         totalAnswers={result.answers.length}
       />
-      {/* <Answer
+      <Answer
         question={result.content}
         questionId={JSON.stringify(result._id)}
         authorId={JSON.stringify(mongoUser._id)}
-      /> */}
+      />
     </div>
   );
 };
