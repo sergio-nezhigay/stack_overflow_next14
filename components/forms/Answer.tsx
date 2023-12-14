@@ -12,7 +12,6 @@ import { Button } from "../ui/button";
 import Image from "next/image";
 import { createAnswer } from "@/lib/actions/answer.action";
 import { usePathname } from "next/navigation";
-import error from "next/error";
 
 interface Props {
   question: string;
