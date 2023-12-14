@@ -21,7 +21,7 @@ function Theme() {
         >
           {mode === "light" ? (
             <Image
-              src="assets/icons/sun.svg"
+              src="/assets/icons/sun.svg"
               alt="sun"
               width={20}
               height={20}
@@ -29,7 +29,7 @@ function Theme() {
             />
           ) : (
             <Image
-              src="assets/icons/moon.svg"
+              src="/assets/icons/moon.svg"
               alt="moon"
               width={20}
               height={20}

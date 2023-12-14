@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Metric from "@/components/shared/Metric";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
-import AllAnswers from "@/components/shared/AllAnswers";
+// import AllAnswers from "@/components/shared/AllAnswers";
 import ParseHTML from "@/components/shared/ParseHTML";
 // import RenderTag from "@/components/shared/RenderTag";
 
@@ -85,11 +85,11 @@ const Page = async ({ params }: any) => {
           />
         ))}
       </div> */}
-      <AllAnswers
+      {/* <AllAnswers
         questionId={result._id}
         userId={JSON.stringify(mongoUser._id)}
         totalAnswers={result.answers.length}
-      />
+      /> */}
       <Answer
         question={result.content}
         questionId={JSON.stringify(result._id)}
