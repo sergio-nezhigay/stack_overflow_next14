@@ -1,6 +1,7 @@
 import { Schema, models, model, Document } from "mongoose";
 
 export interface IAnswer extends Document {
+  question: Schema.Types.ObjectId;
   content: string;
   upvotes: Schema.Types.ObjectId[];
   downvotes: Schema.Types.ObjectId[];
@@ -9,6 +10,11 @@ export interface IAnswer extends Document {
 }
 
 const AnswerSchema = new Schema<IAnswer>({
+  question: {
+    type: Schema.Types.ObjectId,
+    ref: "Question",
+    required: true,
+  },
   content: { type: String, required: true },
   upvotes: [{ type: Schema.Types.ObjectId, ref: "User" }],
   downvotes: [{ type: Schema.Types.ObjectId, ref: "User" }],

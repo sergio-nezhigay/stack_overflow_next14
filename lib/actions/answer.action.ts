@@ -49,15 +49,11 @@ export async function createAnswer(params: CreateAnswerParams) {
   try {
     connectToDatabase();
     const { content, question, author, path } = params;
-    const answer = await Answer.create({
-      content,
-      author,
-      question,
-      path,
-    });
+    const newAnswer = await Answer.create({ content, author, question });
+    console.log("🚀 ~ file: answer.action.ts:53 ~ newAnswer:", newAnswer);
 
     await Question.findByIdAndUpdate(question, {
-      $push: { answers: answer._id },
+      $push: { answers: newAnswer._id },
     });
     revalidatePath(path);
   } catch (error) {}

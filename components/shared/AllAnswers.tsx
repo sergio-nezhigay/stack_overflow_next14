@@ -23,7 +23,11 @@ async function AllAnswers({
   page,
   filter,
 }: Params) {
-  const result = await getAnswers({ questionId });
+  const result = await getAnswers({
+    questionId,
+    page: page ? +page : 1,
+    sortBy: filter,
+  });
   console.log("🚀 ~ file: AllAnswers.tsx:12 ~ answers:", result);
 
   return (
