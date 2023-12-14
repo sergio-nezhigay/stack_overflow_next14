@@ -3,21 +3,22 @@ import Link from "next/link";
 import Image from "next/image";
 import Metric from "@/components/shared/Metric";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
-// import ParseHTML from "@/components/shared/ParseHTML";
-// import RenderTag from "@/components/shared/RenderTag";
-// import Answer from "@/components/forms/Answer";
-// import { auth } from "@clerk/nextjs";
-// import { getUserById } from "@/lib/actions/user.action";
-// import AllAnswers from "@/components/shared/AllAnswers";
+import AllAnswers from "@/components/shared/AllAnswers";
+import ParseHTML from "@/components/shared/ParseHTML";
+import RenderTag from "@/components/shared/RenderTag";
+
+import Answer from "@/components/forms/Answer";
+import { auth } from "@clerk/nextjs";
+import { getUserById } from "@/lib/actions/user.action";
 
 const Page = async ({ params }: any) => {
-  // const { userId: clerkId } = auth();
+  const { userId: clerkId } = auth();
 
-  // let mongoUser;
+  let mongoUser;
 
-  // if (clerkId) {
-  //   mongoUser = await getUserById({ userId: clerkId });
-  // }
+  if (clerkId) {
+    mongoUser = await getUserById({ userId: clerkId });
+  }
   const result = await getQuestionById({ questionId: params.id });
 
   return (
@@ -73,7 +74,7 @@ const Page = async ({ params }: any) => {
           textStyles="small-medium text-dark400_light800"
         />
       </div>
-      {/* <ParseHTML data={result.content} />
+      <ParseHTML data={result.content} />
       <div className="mt-8 flex flex-wrap gap-2">
         {result.tags.map((tag: any) => (
           <RenderTag
@@ -93,7 +94,7 @@ const Page = async ({ params }: any) => {
         question={result.content}
         questionId={JSON.stringify(result._id)}
         authorId={JSON.stringify(mongoUser._id)}
-      /> */}
+      />
     </div>
   );
 };
