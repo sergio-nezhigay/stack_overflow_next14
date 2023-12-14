@@ -1,6 +1,6 @@
 "use server";
 
-import { connectToDatabase, findById } from "../mongoose";
+import { connectToDatabase } from "../mongoose";
 import Question from "@/database/question.model";
 import Tag from "@/database/tag.model";
 import {

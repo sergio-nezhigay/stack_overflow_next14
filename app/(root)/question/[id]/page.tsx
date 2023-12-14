@@ -6,10 +6,23 @@ import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
 import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
 import Answer from "@/components/forms/Answer";
+import { auth } from "@clerk/nextjs";
+import { getUserById } from "@/lib/actions/user.action";
+import AllAnswers from "@/components/shared/AllAnswers";
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page({
+  params, // searchParams,
+}: {
+  params: { id: string };
+}) {
   const result = await getQuestionById({ questionId: params.id });
-  console.log("🚀 ~ file: page.tsx:7 ~ result:", result);
+  const { userId: clerkId } = auth();
+
+  let mongoUser;
+
+  if (clerkId) {
+    mongoUser = await getUserById({ userId: clerkId });
+  }
 
   return (
     <div className="flex w-full flex-col">
@@ -75,7 +88,18 @@ export default async function Page({ params }: { params: { id: string } }) {
           />
         ))}
       </div>
-      <Answer />
+      <AllAnswers
+        questionId={result._id}
+        userId={JSON.stringify(mongoUser._id)}
+        totalAnswers={result.answers.length}
+        // page={searchParams?.page}
+        // filter={searchParams?.filter}
+      />
+      <Answer
+        question={result.content}
+        questionId={JSON.stringify(result._id)}
+        authorId={JSON.stringify(mongoUser._id)}
+      />
     </div>
   );
 }

@@ -12,11 +12,6 @@ export interface IQuestion extends Document {
   createdAt: Date;
 }
 
-// interface IUser {
-//   name: string;
-//   avatarUrl: string;
-// }
-
 const QuestionSchema = new Schema<IQuestion>({
   title: { type: String, required: true },
   content: { type: String, required: true },
