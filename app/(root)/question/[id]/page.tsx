@@ -10,12 +10,9 @@ import { auth } from "@clerk/nextjs";
 import { getUserById } from "@/lib/actions/user.action";
 import AllAnswers from "@/components/shared/AllAnswers";
 
-export default async function Page({
-  params, // searchParams,
-}: {
-  params: { id: string };
-}) {
+const Page = async ({ params }: any) => {
   const result = await getQuestionById({ questionId: params.id });
+
   const { userId: clerkId } = auth();
 
   let mongoUser;
@@ -102,4 +99,6 @@ export default async function Page({
       />
     </div>
   );
-}
+};
+
+export default Page;
