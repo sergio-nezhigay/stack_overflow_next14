@@ -4,7 +4,12 @@ import Answer from "@/database/answer.model";
 import Question from "@/database/question.model";
 import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../mongoose";
-import { CreateAnswerParams, GetAnswersParams } from "./shared.types";
+import {
+  ChangeDownvoteParams,
+  ChangeUpvoteParams,
+  CreateAnswerParams,
+  GetAnswersParams,
+} from "./shared.types";
 import { FilterQuery } from "mongoose";
 
 export async function getAnswers(params: GetAnswersParams) {
@@ -50,11 +55,99 @@ export async function createAnswer(params: CreateAnswerParams) {
     connectToDatabase();
     const { content, question, author, path } = params;
     const newAnswer = await Answer.create({ content, author, question });
-    console.log("🚀 ~ file: answer.action.ts:53 ~ newAnswer:", newAnswer);
 
     await Question.findByIdAndUpdate(question, {
       $push: { answers: newAnswer._id },
     });
     revalidatePath(path);
   } catch (error) {}
+}
+
+export async function upvoteAnswer(params: ChangeUpvoteParams) {
+  const { type, itemId, userId, path, hasUpvoted, hasDownvoted } = params;
+  console.log(
+    "🚀 ~ file==============e, itemId, userId, path, hasUpvoted, hasDownvoted:",
+    type,
+    itemId,
+    userId,
+    path,
+    hasUpvoted,
+    hasDownvoted
+  );
+  let updateQuery = {};
+  let test;
+  try {
+    connectToDatabase();
+    if (hasUpvoted) {
+      updateQuery = { $pull: { upvotes: userId } };
+    } else {
+      updateQuery = { $addToSet: { upvotes: userId } };
+    }
+    if (type === "answer") {
+      await Answer.findByIdAndUpdate(itemId, updateQuery, {
+        new: true,
+      });
+    } else {
+      console.log("🚀 test0");
+      test = await Question.findByIdAndUpdate(itemId, updateQuery, {
+        new: true,
+      });
+      console.log("🚀 ~ file: answer.action.ts:94 ~ test:", test);
+    }
+    if (hasDownvoted) {
+      updateQuery = { $pull: { downvotes: userId } };
+      if (type === "answer") {
+        await Answer.findByIdAndUpdate(itemId, updateQuery, {
+          new: true,
+        });
+      } else {
+        await Question.findByIdAndUpdate(itemId, updateQuery, {
+          new: true,
+        });
+      }
+    }
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function downvoteAnswer(params: ChangeDownvoteParams) {
+  const { type, itemId, userId, path, hasUpvoted, hasDownvoted } = params;
+  let updateQuery = {};
+  try {
+    connectToDatabase();
+    if (hasDownvoted) {
+      updateQuery = { $pull: { downvotes: userId } };
+    } else {
+      updateQuery = { $addToSet: { downvotes: userId } };
+    }
+    if (type === "answer") {
+      await Answer.findByIdAndUpdate(itemId, updateQuery, {
+        new: true,
+      });
+    } else {
+      await Question.findByIdAndUpdate(itemId, updateQuery, {
+        new: true,
+      });
+    }
+
+    if (hasUpvoted) {
+      updateQuery = { $pull: { upvotes: userId } };
+      if (type === "answer") {
+        await Answer.findByIdAndUpdate(itemId, updateQuery, {
+          new: true,
+        });
+      } else {
+        await Question.findByIdAndUpdate(itemId, updateQuery, {
+          new: true,
+        });
+      }
+    }
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }

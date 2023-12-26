@@ -125,7 +125,7 @@ export interface GetAllUsersParams {
   page?: number;
   pageSize?: number;
   filter?: string;
-  searchQuery?: string; // Add searchQuery parameter
+  searchQuery?: string;
 }
 
 export interface UpdateUserParams {
@@ -156,4 +156,22 @@ export interface GetUserStatsParams {
 
 export interface DeleteUserParams {
   clerkId: string;
+}
+
+export interface ChangeUpvoteParams {
+  type: string;
+  itemId: string;
+  userId: string;
+  path: string;
+  hasUpvoted: boolean;
+  hasDownvoted: boolean;
+}
+
+export interface ChangeDownvoteParams {
+  type: string;
+  itemId: string;
+  userId: string;
+  path: string;
+  hasUpvoted: boolean;
+  hasDownvoted: boolean;
 }

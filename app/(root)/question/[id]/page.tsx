@@ -10,6 +10,7 @@ import Answer from "@/components/forms/Answer";
 import { auth } from "@clerk/nextjs";
 import { getUserById } from "@/lib/actions/user.action";
 import RenderTag from "@/components/shared/RenderTag";
+import Votes from "@/components/shared/Votes";
 
 const Page = async ({ params }: any) => {
   const { userId: clerkId } = auth();
@@ -39,7 +40,18 @@ const Page = async ({ params }: any) => {
             {result.author.name}
           </p>
         </Link>
-        <div className="flex justify-end">Voting</div>
+        <div className="flex justify-end">
+          <Votes
+            type="question"
+            userId={JSON.stringify(mongoUser?._id)}
+            itemId={JSON.stringify(params.id)}
+            upvotes={result.upvotes.length}
+            downvotes={result.downvotes.length}
+            hasUpvoted={result.upvotes.includes(mongoUser?._id)}
+            hasDownvoted={result.downvotes.includes(mongoUser?._id)}
+            isSaved={mongoUser?.saved.includes(params.id)}
+          />
+        </div>
       </div>
       <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full text-left">
         {result.title}
@@ -87,7 +99,7 @@ const Page = async ({ params }: any) => {
       </div>
       <AllAnswers
         questionId={result._id}
-        userId={JSON.stringify(mongoUser._id)}
+        userId={mongoUser._id}
         totalAnswers={result.answers.length}
       />
       <Answer

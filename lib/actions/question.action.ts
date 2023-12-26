@@ -7,6 +7,7 @@ import {
   CreateQuestionParams,
   GetQuestionByIdParams,
   GetQuestionsParams,
+  ToggleSaveQuestionParams,
 } from "./shared.types";
 import User from "@/database/user.model";
 import { FilterQuery } from "mongoose";
@@ -111,4 +112,36 @@ export async function createQuestion(params: CreateQuestionParams) {
     });
     revalidatePath(path);
   } catch (error) {}
+}
+
+export async function toggleSaveQuestion(params: ToggleSaveQuestionParams) {
+  try {
+    connectToDatabase();
+
+    const { userId, questionId, path } = params;
+    const user = await User.findOneAndUpdate(
+      { _id: userId, saved: { $ne: questionId } },
+      {
+        $addToSet: {
+          saved: questionId,
+        },
+      },
+      { new: true }
+    );
+    if (!user) {
+      await User.findByIdAndUpdate(
+        userId,
+        {
+          $pull: {
+            saved: questionId,
+          },
+        },
+        { new: true }
+      );
+    }
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log("🚀 ~ file: question.action.ts:140 ~ error:", error);
+  }
 }

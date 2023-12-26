@@ -28,7 +28,6 @@ async function AllAnswers({
     page: page ? +page : 1,
     sortBy: filter,
   });
-  console.log("🚀 ~ file: AllAnswers.tsx:12 ~ answers:", result);
 
   return (
     <div className="mt-11">
@@ -68,7 +67,15 @@ async function AllAnswers({
               </div>
             </Link>
             <div className="flex justify-end">
-              <Votes />
+              <Votes
+                type="answer"
+                userId={JSON.stringify(userId)}
+                itemId={JSON.stringify(answer._id)}
+                upvotes={answer.upvotes.length}
+                downvotes={answer.downvotes.length}
+                hasUpvoted={answer.upvotes.includes(userId)}
+                hasDownvoted={answer.downvotes.includes(userId)}
+              />
             </div>
           </div>
 
