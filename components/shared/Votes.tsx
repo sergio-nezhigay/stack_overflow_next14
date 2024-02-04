@@ -1,14 +1,22 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
+import {
+  downvoteQuestion,
+  toggleSaveQuestion,
+  upvoteQuestion,
+} from "@/lib/actions/question.action";
+import { formatAndDivideNumber } from "@/lib/utils";
 import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.action";
-import { toggleSaveQuestion } from "@/lib/actions/question.action";
+import { viewQuestion } from "@/lib/actions/interaction.action";
 
 const upvoteURL = "/assets/icons/upvote.svg";
+const upvotedURL = "/assets/icons/upvoted.svg";
 const downvoteURL = "/assets/icons/downvote.svg";
+const downvotedURL = "/assets/icons/downvoted.svg";
 const starRedURL = "/assets/icons/star-red.svg";
 const starFilledURL = "/assets/icons/star-filled.svg";
 
@@ -17,9 +25,9 @@ interface IVotes {
   itemId: string;
   upvotes: number;
   downvotes: number;
-  hasUpvoted: boolean;
-  hasDownvoted: boolean;
-  isSaved: boolean;
+  hasupVoted: boolean;
+  hasdownVoted: boolean;
+  hasSaved?: boolean;
   userId: string;
 }
 
@@ -29,98 +37,129 @@ const Votes: React.FC<IVotes> = ({
   userId,
   upvotes,
   downvotes,
-  hasUpvoted,
-  hasDownvoted,
-  isSaved,
+  hasupVoted,
+  hasdownVoted,
+  hasSaved,
 }) => {
-  const path = usePathname();
+  const pathname = usePathname();
+  const router = useRouter();
 
-  async function onUpvote() {
-    try {
-      await upvoteAnswer({
-        type,
-        itemId: JSON.parse(itemId),
-        userId: JSON.parse(userId),
-        path,
-        hasUpvoted,
-        hasDownvoted,
-      });
-    } catch (error) {
-      console.log(error);
+  const handleVote = async (action: string) => {
+    if (!userId) {
+      return;
+      // return toast({
+      //   title: "Please log in",
+      //   description: "You must be logged in to perform this action",
+      // });
     }
-  }
-  async function onDownvote() {
-    try {
-      await downvoteAnswer({
-        type,
-        itemId: JSON.parse(itemId),
-        userId: JSON.parse(userId),
-        path,
-        hasUpvoted,
-        hasDownvoted,
-      });
-    } catch (error) {
-      console.log(error);
+    console.log(action, type);
+    if (action === "upvote") {
+      if (type === "Question") {
+        await upvoteQuestion({
+          questionId: JSON.parse(itemId),
+          userId: JSON.parse(userId),
+          hasupVoted,
+          hasdownVoted,
+          path: pathname,
+        });
+      } else if (type === "Answer") {
+        await upvoteAnswer({
+          answerId: JSON.parse(itemId),
+          userId: JSON.parse(userId),
+          hasupVoted,
+          hasdownVoted,
+          path: pathname,
+        });
+      }
+      return;
+      // return toast({
+      //   title: `Upvote ${!hasupVoted ? "Successful" : "Removed"}`,
+      //   variant: !hasupVoted ? "default" : "destructive",
+      // });
     }
-  }
+
+    if (action === "downvote") {
+      if (type === "Question") {
+        await downvoteQuestion({
+          questionId: JSON.parse(itemId),
+          userId: JSON.parse(userId),
+          hasupVoted,
+          hasdownVoted,
+          path: pathname,
+        });
+      } else if (type === "Answer") {
+        await downvoteAnswer({
+          answerId: JSON.parse(itemId),
+          userId: JSON.parse(userId),
+          hasupVoted,
+          hasdownVoted,
+          path: pathname,
+        });
+      }
+    }
+  };
 
   async function onStar() {
     try {
       await toggleSaveQuestion({
         questionId: JSON.parse(itemId),
         userId: JSON.parse(userId),
-        path,
+        path: pathname,
       });
     } catch (error) {
       console.log(error);
     }
   }
 
+  useEffect(() => {
+    viewQuestion({
+      questionId: JSON.parse(itemId),
+      userId: userId ? JSON.parse(userId) : undefined,
+    });
+  }, [itemId, userId, pathname, router]);
+
   return (
-    <>
+    <div className="flex gap-5">
       <p>{type}</p>
       <Image
-        src={upvoteURL}
+        src={hasupVoted ? upvotedURL : upvoteURL}
         width={18}
         height={18}
-        onClick={() => onUpvote()}
+        onClick={() => handleVote("upvote")}
         alt="up arrow"
-        className=""
+        className="cursor-pointer"
       />
-      <p>{upvotes}</p>
+      <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
+        <p className="subtle-medium text-dark400_light900">
+          {formatAndDivideNumber(upvotes)}
+        </p>
+      </div>
       <Image
-        src={downvoteURL}
+        src={hasdownVoted ? downvotedURL : downvoteURL}
         width={18}
         height={18}
         alt="down arrow"
-        className=""
-        onClick={onDownvote}
+        className="cursor-pointer"
+        onClick={() => handleVote("downvote")}
       />
-      <p>{downvotes}</p>
-      {type === "question" && (
+      <div className="flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1">
+        <p className="subtle-medium text-dark400_light900">
+          {formatAndDivideNumber(downvotes)}
+        </p>
+      </div>
+      {type === "Question" && (
         <>
-          {isSaved ? (
-            <Image
-              src={starFilledURL}
-              width={18}
-              height={18}
-              alt="down arrow"
-              className=""
-              onClick={onStar}
-            />
-          ) : (
-            <Image
-              src={starRedURL}
-              width={18}
-              height={18}
-              alt="down arrow"
-              className=""
-              onClick={onStar}
-            />
-          )}
+          <Image
+            src={hasSaved ? starFilledURL : starRedURL}
+            width={18}
+            height={18}
+            alt="down arrow"
+            className="cursor-pointer"
+            onClick={onStar}
+          />
         </>
       )}
-    </>
+    </div>
   );
 };
 

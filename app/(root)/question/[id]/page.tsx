@@ -14,13 +14,13 @@ import Votes from "@/components/shared/Votes";
 
 const Page = async ({ params }: any) => {
   const { userId: clerkId } = auth();
+  const result = await getQuestionById({ questionId: params.id });
 
   let mongoUser;
 
   if (clerkId) {
     mongoUser = await getUserById({ userId: clerkId });
   }
-  const result = await getQuestionById({ questionId: params.id });
 
   return (
     <div className="flex w-full flex-col">
@@ -42,14 +42,14 @@ const Page = async ({ params }: any) => {
         </Link>
         <div className="flex justify-end">
           <Votes
-            type="question"
+            type="Question"
             userId={JSON.stringify(mongoUser?._id)}
             itemId={JSON.stringify(params.id)}
             upvotes={result.upvotes.length}
             downvotes={result.downvotes.length}
-            hasUpvoted={result.upvotes.includes(mongoUser?._id)}
-            hasDownvoted={result.downvotes.includes(mongoUser?._id)}
-            isSaved={mongoUser?.saved.includes(params.id)}
+            hasupVoted={result.upvotes.includes(mongoUser?._id)}
+            hasdownVoted={result.downvotes.includes(mongoUser?._id)}
+            hasSaved={mongoUser?.saved.includes(result._id)}
           />
         </div>
       </div>
