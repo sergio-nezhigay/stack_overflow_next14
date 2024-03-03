@@ -20,7 +20,7 @@ const QuestionTab = async ({
   console.log("searchParams=", searchParams);
   const { questions, isNext } = await getQuestionsByUserId({
     userId,
-    page: searchParams.page ? +searchParams.page : 1,
+    page: searchParams?.page,
     pageSize: searchParams?.pageSize,
   });
 

@@ -1,11 +1,11 @@
 "use server";
 
 import { FilterQuery } from "mongoose";
-import { connectToDatabase } from "../mongoose";
-import User from "@/database/user.model";
-import Question from "@/database/question.model";
-// import Tag from "@/database/tag.model";
 import { revalidatePath } from "next/cache";
+
+import { connectToDatabase } from "../mongoose";
+import { assignBadges } from "../utils";
+
 import {
   CreateUserParams,
   DeleteUserParams,
@@ -14,9 +14,11 @@ import {
   GetUserByIdParams,
   UpdateUserParams,
 } from "./shared.types";
+
 import Answer from "@/database/answer.model";
+import Question from "@/database/question.model";
+import User from "@/database/user.model";
 import { BadgeCriteriaType } from "@/types";
-import { assignBadges } from "../utils";
 
 export async function getAllUsers(params: GetAllUsersParams) {
   try {
@@ -249,7 +251,7 @@ export async function getQuestionsByUserId(params: GetQuestionsByIdParams) {
       .populate("tags", "_id name")
       .populate("author", "_id clerkId name picture")
       .skip(skipAmount)
-      .limit(pageSize);
+      .limit(+pageSize);
 
     const totalQuestions = await Question.countDocuments(query);
     const isNext = totalQuestions > skipAmount + questions.length;

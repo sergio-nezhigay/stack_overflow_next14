@@ -1,7 +1,6 @@
 import { Schema } from "mongoose";
 
 import { IUser } from "@/mongodb";
-import { ISearchParams } from "@/types";
 
 export interface CreateAnswerParams {
   content: string;

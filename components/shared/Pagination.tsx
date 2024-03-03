@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 
 const Pagination = () => {
   const pathname = usePathname();
