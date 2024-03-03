@@ -1,10 +1,10 @@
-import { SearchParamsProps } from "@/types";
-
 import React from "react";
+
+import { SearchParamsProps } from "@/types";
 
 interface AnswersTabProps extends SearchParamsProps {
   userId: string;
-  clerkId: string;
+  clerkId: string | null;
 }
 
 const AnswersTab = async ({

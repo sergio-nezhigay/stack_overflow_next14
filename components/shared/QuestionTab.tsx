@@ -9,7 +9,7 @@ import { SearchParamsProps } from "@/types";
 
 interface QuestionTabProps extends SearchParamsProps {
   userId: string;
-  clerkId: string;
+  clerkId: string | null;
 }
 
 const QuestionTab = async ({
@@ -17,7 +17,6 @@ const QuestionTab = async ({
   userId,
   clerkId,
 }: QuestionTabProps) => {
-  console.log("searchParams=", searchParams);
   const { questions, isNext } = await getQuestionsByUserId({
     userId,
     page: searchParams?.page,

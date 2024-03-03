@@ -1,26 +1,21 @@
-import { Button } from "@/components/ui/button";
-import { getUserInfo } from "@/lib/actions/user.action";
-import { URLProps } from "@/types";
-import { SignedIn, auth } from "@clerk/nextjs";
+import React from "react";
+import { auth, SignedIn } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import React from "react";
-import { getJoinedDate } from "@/lib/utils";
-import ProfileLink from "@/components/shared/ProfileLink";
-import Stats from "@/components/shared/Stats";
-import QuestionTab from "@/components/shared/QuestionTab";
 import AnswersTab from "@/components/shared/AnswersTab";
-import Informer from "@/components/shared/Informer";
-import { getQuestionsByUserId } from "@/lib/actions/question.action";
+import ProfileLink from "@/components/shared/ProfileLink";
+import QuestionTab from "@/components/shared/QuestionTab";
+import Stats from "@/components/shared/Stats";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getUserInfo } from "@/lib/actions/user.action";
+import { getJoinedDate } from "@/lib/utils";
+import { URLProps } from "@/types";
 
 const Page = async ({ params, searchParams }: URLProps) => {
-  console.log("🚀 ~ searchParams:", searchParams);
   const { userId: clerkId } = auth();
   const userInfo = await getUserInfo({ userId: params.id });
-
-  // console.log("🚀 ~ userQuestions:", userQuestions);
 
   return (
     <>
