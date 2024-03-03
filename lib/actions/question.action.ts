@@ -6,6 +6,7 @@ import Tag from "@/database/tag.model";
 import {
   CreateQuestionParams,
   GetQuestionByIdParams,
+  GetQuestionsByIdParams,
   GetQuestionsByTagIdParams,
   GetQuestionsParams,
   GetSavedQuestionsParams,

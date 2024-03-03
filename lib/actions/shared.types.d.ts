@@ -1,6 +1,7 @@
 import { Schema } from "mongoose";
 
 import { IUser } from "@/mongodb";
+import { ISearchParams } from "@/types";
 
 export interface CreateAnswerParams {
   content: string;
@@ -22,6 +23,12 @@ export interface AnswerVoteParams {
   hasupVoted: boolean;
   hasdownVoted: boolean;
   path: string;
+}
+
+export interface GetQuestionsByIdParams {
+  userId: string;
+  page?: string;
+  pageSize?: string;
 }
 
 export interface DeleteAnswerParams {

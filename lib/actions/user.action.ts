@@ -10,6 +10,7 @@ import {
   CreateUserParams,
   DeleteUserParams,
   GetAllUsersParams,
+  GetQuestionsByIdParams,
   GetUserByIdParams,
   UpdateUserParams,
 } from "./shared.types";
@@ -226,6 +227,34 @@ export async function deleteUser(params: DeleteUserParams) {
     const deletedUser = await User.findByIdAndDelete(user._id);
 
     return deletedUser;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getQuestionsByUserId(params: GetQuestionsByIdParams) {
+  try {
+    connectToDatabase();
+
+    const { userId, page = 1, pageSize = 1 } = params;
+
+    const skipAmount = (Number(page) - 1) * Number(pageSize);
+
+    const query: FilterQuery<typeof Question> = { author: userId };
+    console.log("🚀 ~ pageSize:", pageSize);
+
+    const questions = await Question.find(query)
+      .sort({ views: -1, upvotes: -1 })
+      .populate("tags", "_id name")
+      .populate("author", "_id clerkId name picture")
+      .skip(skipAmount)
+      .limit(pageSize);
+
+    const totalQuestions = await Question.countDocuments(query);
+    const isNext = totalQuestions > skipAmount + questions.length;
+
+    return { questions, isNext };
   } catch (error) {
     console.log(error);
     throw error;
