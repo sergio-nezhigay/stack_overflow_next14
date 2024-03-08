@@ -1,17 +1,22 @@
 "use server";
 
-import Answer from "@/database/answer.model";
-import Question from "@/database/question.model";
+// import { Tag, User } from "lucide-react";
+import { FilterQuery } from "mongoose";
 import { revalidatePath } from "next/cache";
+
 import { connectToDatabase } from "../mongoose";
+
 import {
   AnswerVoteParams,
-  ChangeDownvoteParams,
-  ChangeUpvoteParams,
   CreateAnswerParams,
+  DeleteAnswerParams,
+  GetAnswerByIdParams,
   GetAnswersParams,
 } from "./shared.types";
-import { FilterQuery } from "mongoose";
+
+import Answer from "@/database/answer.model";
+import Interaction from "@/database/interaction.model";
+import Question from "@/database/question.model";
 
 export async function getAnswers(params: GetAnswersParams) {
   try {
@@ -117,6 +122,49 @@ export async function downvoteAnswer(params: AnswerVoteParams) {
       new: true,
     });
 
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+// export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
+//  try {
+//    connectToDatabase();
+//    const { tagId } = params;
+//    const questions = await Question.find({ tags: tagId })
+//      .populate({ path: "tags", model: Tag, select: "_id name" })
+//      .populate({
+//        path: "author",
+//        model: User,
+//        select: "_id clerkId name picture",
+//      });
+//    return questions;
+//  } catch (error) {
+//    console.log(error);
+//    throw error;
+//  }
+// }
+
+export async function deleteAnswer(params: DeleteAnswerParams) {
+  console.log("🚀 ~ deleteAnswer:");
+  try {
+    connectToDatabase();
+    const { answerId, path } = params;
+    const answer = await Answer.findById(answerId);
+    if (!answer) {
+      throw new Error(`Answer not found`);
+    }
+
+    await Answer.deleteOne({ _id: answerId });
+    await Question.updateMany(
+      { _id: answer.question },
+      { $pull: { answers: answerId } }
+    );
+    await Interaction.deleteMany({ answers: answerId });
+
+    console.log("🚀 ~ deleteAnswer10:");
     revalidatePath(path);
   } catch (error) {
     console.log(error);

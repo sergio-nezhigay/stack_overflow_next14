@@ -1,21 +1,27 @@
 "use server";
 
+import { FilterQuery } from "mongoose";
+import { revalidatePath } from "next/cache";
+
 import { connectToDatabase } from "../mongoose";
-import Question from "@/database/question.model";
-import Tag from "@/database/tag.model";
+
 import {
   CreateQuestionParams,
+  DeleteQuestionParams,
+  EditQuestionParams,
   GetQuestionByIdParams,
-  GetQuestionsByIdParams,
   GetQuestionsByTagIdParams,
   GetQuestionsParams,
   GetSavedQuestionsParams,
   QuestionVoteParams,
   ToggleSaveQuestionParams,
 } from "./shared.types";
+
+import Answer from "@/database/answer.model";
+import Interaction from "@/database/interaction.model";
+import Question from "@/database/question.model";
+import Tag from "@/database/tag.model";
 import User from "@/database/user.model";
-import { FilterQuery } from "mongoose";
-import { revalidatePath } from "next/cache";
 
 export async function getQuestionById(params: GetQuestionByIdParams) {
   try {
@@ -41,7 +47,6 @@ export async function getQuestions(params: GetQuestionsParams) {
 
     const { searchQuery, filter, page = 1, pageSize = 10 } = params;
 
-    // Calculcate the number of posts to skip based on the page number and page size
     const skipAmount = (page - 1) * pageSize;
 
     const query: FilterQuery<typeof Question> = {};
@@ -148,7 +153,6 @@ export async function createQuestion(params: CreateQuestionParams) {
 
     const { title, content, tags, author, path } = params;
 
-    // Create the question
     const question = await Question.create({
       title,
       content,
@@ -156,7 +160,7 @@ export async function createQuestion(params: CreateQuestionParams) {
     });
 
     const tagDocuments = [];
-    // Create the tags or get them if they already exist
+
     for (const tag of tags) {
       const existingTag = await Tag.findOneAndUpdate(
         { name: { $regex: new RegExp(`^${tag}$`, "i") } },
@@ -304,6 +308,43 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
         select: "_id clerkId name picture",
       });
     return questions;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function deleteQuestion(params: DeleteQuestionParams) {
+  try {
+    connectToDatabase();
+    const { questionId, path } = params;
+    await Question.deleteOne({ _id: questionId });
+    await Answer.deleteMany({ question: questionId });
+    await Interaction.deleteOne({ question: questionId });
+    await Tag.updateMany(
+      { questions: questionId },
+      { $pull: { questions: questionId } }
+    );
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function editQuestion(params: EditQuestionParams) {
+  try {
+    connectToDatabase();
+
+    const { questionId, title, content, path } = params;
+
+    const filter = { _id: questionId };
+    const update = { title, content };
+
+    const question = await Question.findOneAndUpdate(filter, update);
+    revalidatePath(path);
+    return question;
   } catch (error) {
     console.log(error);
     throw error;

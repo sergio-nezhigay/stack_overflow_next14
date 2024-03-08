@@ -1,11 +1,15 @@
 "use client";
 
-import Image from "next/image";
 import React, { useRef, useState } from "react";
-import { Editor } from "@tinymce/tinymce-react";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Editor } from "@tinymce/tinymce-react";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 import * as z from "zod";
+
+import { Badge } from "../ui/badge";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,47 +21,63 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { QuestionsSchema } from "@/lib/validations";
-import { Badge } from "../ui/badge";
-import { createQuestion } from "@/lib/actions/question.action";
-import { useRouter, usePathname } from "next/navigation";
 import { useTheme } from "@/context/ThemeProvider";
-
-const type: any = "create";
+import { createQuestion, editQuestion } from "@/lib/actions/question.action";
+import { QuestionsSchema } from "@/lib/validations";
 
 interface Props {
   mongoUserId: string;
+  type?: string;
+  questionDetails?: string;
 }
 
-function Question({ mongoUserId }: Props) {
+function Question({ mongoUserId, type, questionDetails }: Props) {
+  const question = JSON.parse(questionDetails || "");
+
   const { mode } = useTheme();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const editorRef = useRef(null);
   const router = useRouter();
   const pathname = usePathname();
-
+  const groupedTags = question.tags.map((tag: { name: any }) => tag.name);
   const form = useForm<z.infer<typeof QuestionsSchema>>({
     resolver: zodResolver(QuestionsSchema),
-    defaultValues: {
-      title: "",
-      explanation: "",
-      tags: [],
-    },
+    defaultValues:
+      type === "Edit"
+        ? {
+            title: question?.title || "",
+            explanation: question.content || "",
+            tags: groupedTags,
+          }
+        : {
+            title: "",
+            explanation: "",
+            tags: [],
+          },
   });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof QuestionsSchema>) {
     setIsSubmitting(true);
-
     try {
-      await createQuestion({
-        title: values.title,
-        content: values.explanation,
-        tags: values.tags,
-        author: JSON.parse(mongoUserId),
-        path: pathname,
-      });
-      router.push("/");
+      if (type === "Edit") {
+        await editQuestion({
+          questionId: question._id,
+          title: values.title,
+          content: values.explanation,
+          path: pathname,
+        });
+        router.push(`/question/${question._id}`);
+      } else {
+        await createQuestion({
+          title: values.title,
+          content: values.explanation,
+          tags: values.tags,
+          author: JSON.parse(mongoUserId),
+          path: pathname,
+        });
+        router.push("/");
+      }
     } catch (error) {
     } finally {
       setIsSubmitting(false);
@@ -145,7 +165,7 @@ function Question({ mongoUserId }: Props) {
                 }}
                 onBlur={field.onBlur}
                 onEditorChange={(content) => field.onChange(content)}
-                initialValue=""
+                initialValue={question?.content || ""}
                 init={{
                   height: 350,
                   menubar: false,
@@ -194,7 +214,7 @@ function Question({ mongoUserId }: Props) {
               <FormControl className="mt-3.5">
                 <>
                   <Input
-                    // disabled={type === "Edit"}
+                    disabled={type === "Edit"}
                     className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
                     placeholder="Add tags..."
                     onKeyDown={(e) => handleInputKeyDown(e, field)}
@@ -206,7 +226,11 @@ function Question({ mongoUserId }: Props) {
                         <Badge
                           key={tag}
                           className="subtle-medium background-light800_dark300 text-light400_light500 flex items-center justify-center gap-2 rounded-md border-none px-4 py-2 capitalize"
-                          onClick={() => handleTagRemove(tag, field)}
+                          onClick={
+                            type !== "Edit"
+                              ? () => handleTagRemove(tag, field)
+                              : () => {}
+                          }
                           //   onClick={() =>
                           //     type !== "Edit"
                           //       ? handleTagRemove(tag, field)
@@ -214,8 +238,7 @@ function Question({ mongoUserId }: Props) {
                           //   }
                         >
                           {tag}
-                          {
-                            //   {type !== "Edit" && (
+                          {type !== "Edit" && (
                             <Image
                               src="/assets/icons/close.svg"
                               alt="Close icon"
@@ -223,7 +246,7 @@ function Question({ mongoUserId }: Props) {
                               height={12}
                               className="cursor-pointer object-contain invert-0 dark:invert"
                             />
-                          }
+                          )}
                         </Badge>
                       ))}
                     </div>

@@ -10,7 +10,7 @@ import {
   CreateUserParams,
   DeleteUserParams,
   GetAllUsersParams,
-  GetQuestionsByIdParams,
+  GetQuestionsByIdParams as GetUserStatsParams,
   GetUserByIdParams,
   UpdateUserParams,
 } from "./shared.types";
@@ -235,7 +235,7 @@ export async function deleteUser(params: DeleteUserParams) {
   }
 }
 
-export async function getQuestionsByUserId(params: GetQuestionsByIdParams) {
+export async function getQuestionsByUserId(params: GetUserStatsParams) {
   try {
     connectToDatabase();
 
@@ -244,7 +244,6 @@ export async function getQuestionsByUserId(params: GetQuestionsByIdParams) {
     const skipAmount = (Number(page) - 1) * Number(pageSize);
 
     const query: FilterQuery<typeof Question> = { author: userId };
-    console.log("🚀 ~ pageSize:", pageSize);
 
     const questions = await Question.find(query)
       .sort({ views: -1, upvotes: -1 })
@@ -257,6 +256,32 @@ export async function getQuestionsByUserId(params: GetQuestionsByIdParams) {
     const isNext = totalQuestions > skipAmount + questions.length;
 
     return { questions, isNext };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+export async function getAnswersByUserId(params: GetUserStatsParams) {
+  try {
+    connectToDatabase();
+
+    const { userId, page = 1, pageSize = 1 } = params;
+
+    const skipAmount = (Number(page) - 1) * Number(pageSize);
+
+    const query: FilterQuery<typeof Answer> = { author: userId };
+
+    const answers = await Answer.find(query)
+      .sort({ upvotes: -1 })
+      .populate("author", "_id clerkId name picture")
+      .populate("question", "_id title content")
+      .skip(skipAmount)
+      .limit(+pageSize);
+
+    const totalAnswers = await Answer.countDocuments(query);
+    const isNext = totalAnswers > skipAmount + answers.length;
+
+    return { answers, isNext };
   } catch (error) {
     console.log(error);
     throw error;

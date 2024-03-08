@@ -4,14 +4,14 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 
+import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.action";
+import { viewQuestion } from "@/lib/actions/interaction.action";
 import {
   downvoteQuestion,
   toggleSaveQuestion,
   upvoteQuestion,
 } from "@/lib/actions/question.action";
 import { formatAndDivideNumber } from "@/lib/utils";
-import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.action";
-import { viewQuestion } from "@/lib/actions/interaction.action";
 
 const upvoteURL = "/assets/icons/upvote.svg";
 const upvotedURL = "/assets/icons/upvoted.svg";
@@ -52,7 +52,7 @@ const Votes: React.FC<IVotes> = ({
       //   description: "You must be logged in to perform this action",
       // });
     }
-    console.log(action, type);
+
     if (action === "upvote") {
       if (type === "Question") {
         await upvoteQuestion({

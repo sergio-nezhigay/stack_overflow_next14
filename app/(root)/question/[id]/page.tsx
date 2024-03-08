@@ -1,16 +1,16 @@
-import { getQuestionById } from "@/lib/actions/question.action";
-import Link from "next/link";
+import { auth } from "@clerk/nextjs";
 import Image from "next/image";
-import Metric from "@/components/shared/Metric";
-import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
-import AllAnswers from "@/components/shared/AllAnswers";
-import ParseHTML from "@/components/shared/ParseHTML";
+import Link from "next/link";
 
 import Answer from "@/components/forms/Answer";
-import { auth } from "@clerk/nextjs";
-import { getUserById } from "@/lib/actions/user.action";
+import AllAnswers from "@/components/shared/AllAnswers";
+import Metric from "@/components/shared/Metric";
+import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
 import Votes from "@/components/shared/Votes";
+import { getQuestionById } from "@/lib/actions/question.action";
+import { getUserById } from "@/lib/actions/user.action";
+import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
 
 const Page = async ({ params }: any) => {
   const { userId: clerkId } = auth();

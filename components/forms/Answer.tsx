@@ -2,16 +2,18 @@
 
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Form, FormField, FormItem, FormMessage } from "../ui/form";
-import { AnswerSchema } from "@/lib/validations";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Editor } from "@tinymce/tinymce-react";
-import { useTheme } from "@/context/ThemeProvider";
-import { Button } from "../ui/button";
 import Image from "next/image";
-import { createAnswer } from "@/lib/actions/answer.action";
 import { usePathname } from "next/navigation";
+import { z } from "zod";
+
+import { Button } from "../ui/button";
+import { Form, FormField, FormItem, FormMessage } from "../ui/form";
+
+import { useTheme } from "@/context/ThemeProvider";
+import { createAnswer } from "@/lib/actions/answer.action";
+import { AnswerSchema } from "@/lib/validations";
 
 interface Props {
   question: string;

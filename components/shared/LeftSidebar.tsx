@@ -1,11 +1,13 @@
 "use client";
 
-import { sidebarLinks } from "@/constants";
+import { SignedOut, useAuth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
 import { Button } from "../ui/button";
-import { SignedOut, useAuth } from "@clerk/nextjs";
+
+import { sidebarLinks } from "@/constants";
 
 const LeftSidebar = () => {
   const pathname = usePathname();
@@ -40,8 +42,8 @@ const LeftSidebar = () => {
               <Image
                 src={item.imgURL}
                 alt={item.label}
-                width={20}
                 height={20}
+                width={20}
                 className={`${isActive ? "" : "invert-colors"}`}
               />
               <p
