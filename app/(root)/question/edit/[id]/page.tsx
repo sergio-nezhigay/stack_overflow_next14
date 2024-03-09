@@ -11,7 +11,6 @@ const Page = async ({ params }: ParamsProps) => {
   if (!userId) return null;
   const mongoUser = await getUserById({ userId });
   const result = await getQuestionById({ questionId: params.id });
-  const showQuestionForm = userId && userId === result.author.clerkId;
 
   return (
     <div>

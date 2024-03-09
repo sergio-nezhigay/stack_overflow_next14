@@ -1,15 +1,11 @@
-import HomeFilters from "@/components/home/HomeFilters";
-import Filter from "@/components/shared/Filter";
-import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
-import { HomePageFilters, QuestionFilters } from "@/constants/filters";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { auth } from "@clerk/nextjs";
 
 import QuestionCard from "@/components/cards/QuestionCard";
+import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
+import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
+import { QuestionFilters } from "@/constants/filters";
 import { getSavedQuestions } from "@/lib/actions/question.action";
-
-import { auth } from "@clerk/nextjs";
 
 export default async function Collection() {
   const { userId: clerkId } = auth();
