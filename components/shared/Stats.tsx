@@ -1,7 +1,13 @@
 import React from "react";
+
 import Informer from "./Informer";
 
-function Stats({ totalQuestions, totalAnswers }) {
+interface Props {
+  totalQuestions: number;
+  totalAnswers: number;
+}
+
+function Stats({ totalQuestions, totalAnswers }: Props) {
   return (
     <>
       <h4>Stats</h4>
