@@ -1,6 +1,5 @@
 "use server";
 
-// import { Tag, User } from "lucide-react";
 import { FilterQuery } from "mongoose";
 import { revalidatePath } from "next/cache";
 
@@ -10,7 +9,6 @@ import {
   AnswerVoteParams,
   CreateAnswerParams,
   DeleteAnswerParams,
-  GetAnswerByIdParams,
   GetAnswersParams,
 } from "./shared.types";
 
@@ -163,8 +161,6 @@ export async function deleteAnswer(params: DeleteAnswerParams) {
       { $pull: { answers: answerId } }
     );
     await Interaction.deleteMany({ answers: answerId });
-
-    console.log("🚀 ~ deleteAnswer10:");
     revalidatePath(path);
   } catch (error) {
     console.log(error);
