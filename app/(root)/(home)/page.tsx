@@ -10,6 +10,9 @@ import { HomePageFilters } from "@/constants/filters";
 import { getQuestions } from "@/lib/actions/question.action";
 
 export default async function Home() {
+  const developmentMessage =
+    "🚧 This site is in development. Some functions may not be available. Thank you for your understanding! 🚀";
+
   const result = await getQuestions({});
 
   return (
@@ -39,6 +42,7 @@ export default async function Home() {
       </div>
       <HomeFilters />
       <div className="mt-10 flex w-full flex-col gap-6">
+        <p className="text-5xl font-bold text-red-500">{developmentMessage}</p>
         {result.questions.length > 0 ? (
           result.questions.map((question) => (
             <QuestionCard
