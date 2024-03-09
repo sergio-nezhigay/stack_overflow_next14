@@ -1,9 +1,9 @@
-import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
+import UserCard from "@/components/cards/UserCard";
 import Filter from "@/components/shared/Filter";
+import NoResult from "@/components/shared/NoResult";
+import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
 import { UserFilters } from "@/constants/filters";
 import { getAllUsers } from "@/lib/actions/user.action";
-import NoResult from "@/components/shared/NoResult";
-import UserCard from "@/components/cards/UserCard";
 
 export default async function Home() {
   const result = await getAllUsers({});

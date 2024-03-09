@@ -1,12 +1,14 @@
-import { AnswerFilters } from "@/constants/filters";
-import { getAnswers } from "@/lib/actions/answer.action";
-import Filter from "./Filter";
 import React from "react";
-import { getTimestamp } from "@/lib/utils";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+
+import Filter from "./Filter";
 import ParseHTML from "./ParseHTML";
 import Votes from "./Votes";
+
+import { AnswerFilters } from "@/constants/filters";
+import { getAnswers } from "@/lib/actions/answer.action";
+import { getTimestamp } from "@/lib/utils";
 
 interface Params {
   questionId: string;

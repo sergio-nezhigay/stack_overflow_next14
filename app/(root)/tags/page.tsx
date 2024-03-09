@@ -1,9 +1,9 @@
-import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
-import Filter from "@/components/shared/Filter";
-import { TagFilters } from "@/constants/filters";
-import NoResult from "@/components/shared/NoResult";
-import { getAllTags } from "@/lib/actions/tag.actions";
 import TagCard from "@/components/cards/TagCard";
+import Filter from "@/components/shared/Filter";
+import NoResult from "@/components/shared/NoResult";
+import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
+import { TagFilters } from "@/constants/filters";
+import { getAllTags } from "@/lib/actions/tag.actions";
 
 export default async function Home() {
   const result = await getAllTags({});

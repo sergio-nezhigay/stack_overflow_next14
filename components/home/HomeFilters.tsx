@@ -2,8 +2,9 @@
 
 import React, { useState } from "react";
 
-import { HomePageFilters } from "@/constants/filters";
 import { Button } from "../ui/button";
+
+import { HomePageFilters } from "@/constants/filters";
 
 function HomeFilters() {
   const [active] = useState("Newest");
