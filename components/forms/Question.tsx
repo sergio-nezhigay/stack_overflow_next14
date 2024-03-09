@@ -32,14 +32,15 @@ interface Props {
 }
 
 function Question({ mongoUserId, type, questionDetails }: Props) {
-  const question = JSON.parse(questionDetails || "");
+  //  const question = JSON.parse(questionDetails || {});
+  const question = questionDetails ? JSON.parse(questionDetails || "") : null;
 
   const { mode } = useTheme();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const editorRef = useRef(null);
   const router = useRouter();
   const pathname = usePathname();
-  const groupedTags = question.tags.map((tag: { name: any }) => tag.name);
+  const groupedTags = question?.tags.map((tag: { name: any }) => tag.name);
   const form = useForm<z.infer<typeof QuestionsSchema>>({
     resolver: zodResolver(QuestionsSchema),
     defaultValues:

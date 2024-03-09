@@ -350,3 +350,30 @@ export async function editQuestion(params: EditQuestionParams) {
     throw error;
   }
 }
+
+export async function getPopularQuestions() {
+  try {
+    connectToDatabase();
+
+    const questions = await Question.aggregate([
+      {
+        $addFields: {
+          popularity: {
+            $sum: [
+              { $multiply: ["$views", 1] },
+              { $multiply: [{ $size: "$upvotes" }, 2] },
+              { $multiply: [{ $size: "$answers" }, 3] },
+            ],
+          },
+        },
+      },
+    ])
+      .project({ title: 1 })
+      .limit(5);
+
+    return { questions };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}

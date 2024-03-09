@@ -1,15 +1,18 @@
 "use server";
 
-import User from "@/database/user.model";
+import { FilterQuery } from "mongoose";
+
 import { connectToDatabase } from "../mongoose";
+
 import {
   GetAllTagsParams,
   GetQuestionsByTagIdParams,
   GetTopInteractedTagsParams,
 } from "./shared.types";
-import Tag, { ITag } from "@/database/tag.model";
+
 import Question from "@/database/question.model";
-import { FilterQuery } from "mongoose";
+import Tag, { ITag } from "@/database/tag.model";
+import User from "@/database/user.model";
 
 export async function getTopInteractedTags(params: GetTopInteractedTagsParams) {
   try {
@@ -70,9 +73,9 @@ export async function getAllTags(params: GetAllTagsParams) {
       case "old":
         sortOptions = { createdAt: 1 };
         break;
-      // case "popular":
-      //   sortOptions = { questions.length: -1 };
-      //   break;
+      case "popular":
+        sortOptions = { "questions.length": -1 };
+        break;
       case "name":
         sortOptions = { name: 1 };
         break;
