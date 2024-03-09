@@ -41,5 +41,6 @@
         ]
       }
     }
-  ]
+  ],
+  "ignorePatterns": ["ui/**", "components/ui/**"]
 }

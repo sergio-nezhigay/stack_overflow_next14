@@ -1,6 +1,6 @@
-import { useTheme } from "@/context/ThemeProvider";
-import Image from "next/image";
 import React from "react";
+import Image from "next/image";
+
 import {
   Menubar,
   MenubarContent,
@@ -9,6 +9,7 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import { themes } from "@/constants";
+import { useTheme } from "@/context/ThemeProvider";
 
 function Theme() {
   const { mode, setMode } = useTheme();
@@ -16,7 +17,7 @@ function Theme() {
     <Menubar className="relative border-none bg-transparent shadow-none">
       <MenubarMenu>
         <MenubarTrigger
-          className="focus:bg-light-900 data-[state=open]:bg-light-900 
+          className="focus:bg-light-900 data-[state=open]:bg-light-900
         dark:focus:bg-dark-200 dark:data-[state=open]:bg-dark-200"
         >
           {mode === "light" ? (

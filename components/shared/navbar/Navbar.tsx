@@ -1,12 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import React from "react";
-import Image from "next/image";
 import { SignedIn, UserButton } from "@clerk/nextjs";
-import Theme from "./Theme";
-import MobileNav from "./MobileNav";
+import Image from "next/image";
+import Link from "next/link";
+
 import GlobalSearch from "../search/GlobalSearch";
+
+import MobileNav from "./MobileNav";
+import Theme from "./Theme";
 
 function Navbar() {
   return (
