@@ -15,6 +15,7 @@ import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
 const Page = async ({ params }: any) => {
   const { userId: clerkId } = auth();
   const result = await getQuestionById({ questionId: params.id });
+  console.log("🚀 ~ result:", result);
 
   let mongoUser;
 
@@ -99,13 +100,13 @@ const Page = async ({ params }: any) => {
       </div>
       <AllAnswers
         questionId={result._id}
-        userId={mongoUser._id}
+        userId={mongoUser?._id}
         totalAnswers={result.answers.length}
       />
       <Answer
         question={result.content}
         questionId={JSON.stringify(result._id)}
-        authorId={JSON.stringify(mongoUser._id)}
+        authorId={JSON.stringify(mongoUser?._id)}
       />
     </div>
   );

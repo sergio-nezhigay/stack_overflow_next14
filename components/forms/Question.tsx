@@ -47,7 +47,7 @@ function Question({ mongoUserId, type, questionDetails }: Props) {
       type === "Edit"
         ? {
             title: question?.title || "",
-            explanation: question.content || "",
+            explanation: question?.content || "",
             tags: groupedTags,
           }
         : {

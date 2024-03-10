@@ -8,15 +8,20 @@ import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
 import { Button } from "@/components/ui/button";
 import { HomePageFilters } from "@/constants/filters";
 import { getQuestions } from "@/lib/actions/question.action";
+import { SearchParamsProps } from "@/types";
 
-export default async function Home() {
+export default async function Home({ searchParams }: SearchParamsProps) {
+  console.log("🚀 ~ searchParams:", searchParams);
   const developmentMessage =
     "🚧 This site is in development. Some functions may not be available. Thank you for your understanding! 🚀";
 
-  const result = await getQuestions({});
+  const result = await getQuestions(searchParams);
 
   return (
     <>
+      <p className="mb-3 text-lg font-bold text-red-500">
+        {developmentMessage}
+      </p>
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
         <h1 className="h1-bold text-dark100_light900">All Questions</h1>
 
@@ -42,7 +47,6 @@ export default async function Home() {
       </div>
       <HomeFilters />
       <div className="mt-10 flex w-full flex-col gap-6">
-        <p className="text-5xl font-bold text-red-500">{developmentMessage}</p>
         {result.questions.length > 0 ? (
           result.questions.map((question) => (
             <QuestionCard
