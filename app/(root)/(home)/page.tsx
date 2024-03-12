@@ -15,7 +15,7 @@ export default async function Home({ searchParams }: SearchParamsProps) {
   const developmentMessage =
     "🚧 This site is in development. Some functions may not be available. Thank you for your understanding! 🚀";
 
-  const result = await getQuestions(searchParams);
+  const result = await getQuestions({ searchQuery: searchParams?.q });
 
   return (
     <>

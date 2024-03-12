@@ -96,15 +96,8 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
   try {
     connectToDatabase();
 
-    const { clerkId, searchQuery, filter, page = 1, pageSize = 10 } = params;
-    const user = await User.findOne({ clerkId });
-    const savedQuestionIds = user ? user.saved : [];
-
-    const skipAmount = (page - 1) * pageSize;
-
-    const query: FilterQuery<typeof Question> = {
-      _id: { $in: savedQuestionIds },
-    };
+    const { clerkId, searchQuery, page = 1, pageSize = 10 } = params;
+    const query: FilterQuery<typeof Question> = {};
 
     if (searchQuery) {
       query.$or = [
@@ -113,34 +106,30 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
       ];
     }
 
-    let sortOptions = {};
+    const skipAmount = (page - 1) * pageSize;
+    const user = await User.findOne({ clerkId }).populate({
+      path: "saved",
+      model: Question,
+      match: query,
+      options: {
+        skip: skipAmount,
+        limit: pageSize + 1,
+      },
+      populate: [
+        { path: "tags", model: Tag, select: "_id name" },
+        { path: "author", model: User, select: "_id clerkId name picture" },
+      ],
+    });
 
-    switch (filter) {
-      case "newest":
-        sortOptions = { createdAt: -1 };
-        break;
-      case "frequent":
-        sortOptions = { views: -1 };
-        break;
-      case "unanswered":
-        query.answers = { $size: 0 };
-        break;
-      default:
-        break;
+    const isNext = user.saved.length > pageSize;
+
+    if (!user) {
+      throw new Error("User not found");
     }
 
-    const questions = await Question.find(query)
-      .populate({ path: "tags", model: Tag })
-      .populate({ path: "author", model: User })
-      .skip(skipAmount)
-      .limit(pageSize)
-      .sort(sortOptions);
+    const savedQuestions = user.saved;
 
-    const totalQuestions = await Question.countDocuments(query);
-
-    const isNext = totalQuestions > skipAmount + questions.length;
-
-    return { questions, isNext };
+    return { questions: savedQuestions, isNext };
   } catch (error) {
     console.log(error);
     throw error;

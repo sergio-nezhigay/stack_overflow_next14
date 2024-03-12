@@ -46,9 +46,9 @@ export async function getAllUsers(params: GetAllUsersParams) {
       case "oldest":
         sortOptions = { createdAt: 1 };
         break;
-      // case "topcontributors":
-      //   sortOptions = { saved.length: -1 };
-      //   break;
+      case "topcontributors":
+        sortOptions = { "saved.length": -1 };
+        break;
       default:
         break;
     }

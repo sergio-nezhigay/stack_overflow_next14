@@ -6,12 +6,16 @@ import NoResult from "@/components/shared/NoResult";
 import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
 import { QuestionFilters } from "@/constants/filters";
 import { getSavedQuestions } from "@/lib/actions/question.action";
+import { SearchParamsProps } from "@/types";
 
-export default async function Collection() {
+export default async function Collection({ searchParams }: SearchParamsProps) {
   const { userId: clerkId } = auth();
   if (!clerkId) return null;
 
-  const result = await getSavedQuestions({ clerkId });
+  const result = await getSavedQuestions({
+    clerkId,
+    searchQuery: searchParams?.q,
+  });
 
   return (
     <>
@@ -19,7 +23,7 @@ export default async function Collection() {
 
       <div className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center md:flex-col">
         <LocalSearchbar
-          route="/"
+          route="/collection"
           iconPosition="left"
           imgSrc="/assets/icons/search.svg"
           placeholder="Search for questions"
@@ -33,7 +37,7 @@ export default async function Collection() {
 
       <div className="mt-10 flex w-full flex-col gap-6">
         {result.questions.length > 0 ? (
-          result.questions.map((question) => (
+          result.questions.map((question: any) => (
             <QuestionCard
               key={question._id}
               _id={question._id}

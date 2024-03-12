@@ -4,11 +4,10 @@ import NoResult from "@/components/shared/NoResult";
 import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
 import { UserFilters } from "@/constants/filters";
 import { getAllUsers } from "@/lib/actions/user.action";
+import { SearchParamsProps } from "@/types";
 
-export default async function Home() {
-  const result = await getAllUsers({});
-  result.users.push(result.users[0]);
-  result.users.push(result.users[0]);
+export default async function Home({ searchParams }: SearchParamsProps) {
+  const result = await getAllUsers({ searchQuery: searchParams?.q });
 
   return (
     <>
