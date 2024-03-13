@@ -100,6 +100,7 @@ export async function getAllTags(params: GetAllTagsParams) {
 }
 
 export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
+  console.log("🚀 ~ getQuestionsByTagId:");
   try {
     connectToDatabase();
 
@@ -107,17 +108,21 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
     const skipAmount = (page - 1) * pageSize;
 
     const tagFilter: FilterQuery<ITag> = { _id: tagId };
+    const query: FilterQuery<typeof Question> = {};
+    if (searchQuery) {
+      query.$or = [
+        { title: { $regex: new RegExp(searchQuery, "i") } },
+        { content: { $regex: new RegExp(searchQuery, "i") } },
+      ];
+    }
 
     const tag = await Tag.findOne(tagFilter).populate({
       path: "questions",
       model: Question,
-      match: searchQuery
-        ? { title: { $regex: searchQuery, $options: "i" } }
-        : {},
+      match: query,
       options: {
-        sort: { createdAt: -1 },
         skip: skipAmount,
-        limit: pageSize + 1, // +1 to check if there is next page
+        limit: pageSize + 1,
       },
       populate: [
         { path: "tags", model: Tag, select: "_id name" },
