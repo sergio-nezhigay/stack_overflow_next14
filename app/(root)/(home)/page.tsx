@@ -11,11 +11,13 @@ import { getQuestions } from "@/lib/actions/question.action";
 import { SearchParamsProps } from "@/types";
 
 export default async function Home({ searchParams }: SearchParamsProps) {
-  console.log("🚀 ~ searchParams:", searchParams);
   const developmentMessage =
     "🚧 This site is in development. Some functions may not be available. Thank you for your understanding! 🚀";
 
-  const result = await getQuestions({ searchQuery: searchParams?.q });
+  const result = await getQuestions({
+    searchQuery: searchParams?.q,
+    filter: searchParams?.filter,
+  });
 
   return (
     <>
