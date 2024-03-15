@@ -96,9 +96,29 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
   try {
     connectToDatabase();
 
-    const { clerkId, searchQuery, page = 1, pageSize = 10 } = params;
+    const { clerkId, searchQuery, filter, page = 1, pageSize = 10 } = params;
     const query: FilterQuery<typeof Question> = {};
+    let sortOptions = {};
 
+    switch (filter) {
+      case "most_recent":
+        sortOptions = { createdAt: -1 };
+        break;
+      case "oldest":
+        sortOptions = { createdAt: 1 };
+        break;
+      case "most_voted":
+        sortOptions = { upvotes: -1 };
+        break;
+      case "most_viewed":
+        sortOptions = { views: -1 };
+        break;
+      case "most_answered":
+        sortOptions = { answers: -1 };
+        break;
+      default:
+        break;
+    }
     if (searchQuery) {
       query.$or = [
         { title: { $regex: new RegExp(searchQuery, "i") } },
@@ -114,6 +134,7 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
       options: {
         skip: skipAmount,
         limit: pageSize + 1,
+        sort: sortOptions,
       },
       populate: [
         { path: "tags", model: Tag, select: "_id name" },

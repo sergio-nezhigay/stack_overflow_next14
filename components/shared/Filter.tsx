@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import {
   Select,
@@ -10,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
 
 interface Props {
   filters: {
@@ -20,10 +22,36 @@ interface Props {
   containerClasses?: string;
 }
 
+type ActiveState = string | null;
+
 function Filter({ filters, otherClasses, containerClasses }: Props) {
+  const [active, setActive] = React.useState<ActiveState>(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const paramFilter = searchParams.get("filter");
+
+  const onFilter = (value: string) => {
+    let newUrl;
+    if (active !== value) {
+      newUrl = formUrlQuery({
+        params: searchParams.toString(),
+        key: "filter",
+        value,
+      });
+      setActive(value);
+    } else {
+      newUrl = removeKeysFromQuery({
+        params: searchParams.toString(),
+        keysToRemove: ["filter"],
+      });
+      setActive(null);
+    }
+    router.push(newUrl, { scroll: false });
+  };
+
   return (
     <div className={containerClasses}>
-      <Select>
+      <Select onValueChange={onFilter} defaultValue={paramFilter || undefined}>
         <SelectTrigger
           className={`${otherClasses} body-regular light-border background-light800_dark300 text-dark500_light700 border px-5 py-2.5`}
         >
