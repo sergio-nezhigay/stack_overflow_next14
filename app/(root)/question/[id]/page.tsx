@@ -11,11 +11,13 @@ import Votes from "@/components/shared/Votes";
 import { getQuestionById } from "@/lib/actions/question.action";
 import { getUserById } from "@/lib/actions/user.action";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
+import { URLProps } from "@/types";
 
-const Page = async ({ params }: any) => {
+const Page = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth();
-  const result = await getQuestionById({ questionId: params.id });
-  console.log("🚀 ~ result:", result);
+  const result = await getQuestionById({
+    questionId: params.id,
+  });
 
   let mongoUser;
 
@@ -100,8 +102,10 @@ const Page = async ({ params }: any) => {
       </div>
       <AllAnswers
         questionId={result._id}
-        userId={mongoUser?._id}
         totalAnswers={result.answers.length}
+        userId={mongoUser?._id}
+        filter={searchParams?.filter}
+        page={searchParams?.page}
       />
       <Answer
         question={result.content}

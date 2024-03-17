@@ -67,17 +67,21 @@ export async function getAllTags(params: GetAllTagsParams) {
     let sortOptions = {};
 
     switch (filter) {
-      case "recent":
-        sortOptions = { createdAt: -1 };
-        break;
-      case "old":
-        sortOptions = { createdAt: 1 };
-        break;
       case "popular":
-        sortOptions = { "questions.length": -1 };
+        sortOptions = { questions: -1 };
+        break;
+      case "recent":
+        sortOptions = {
+          createdOn: -1,
+        };
         break;
       case "name":
         sortOptions = { name: 1 };
+        break;
+      case "old":
+        sortOptions = {
+          createdOn: 1,
+        };
         break;
       default:
         break;

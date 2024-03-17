@@ -23,19 +23,20 @@ export async function getAnswers(params: GetAnswersParams) {
 
     const skipAmount = (page - 1) * pageSize;
 
-    const query: FilterQuery<typeof Question> = {};
-
     let sortOptions = {};
 
     switch (sortBy) {
-      case "newest":
+      case "recent":
         sortOptions = { createdAt: -1 };
         break;
-      case "frequent":
-        sortOptions = { views: -1 };
+      case "old":
+        sortOptions = { createdAt: 1 };
         break;
-      case "unanswered":
-        query.answers = { $size: 0 };
+      case "highestUpvotes":
+        sortOptions = { upvotes: -1 };
+        break;
+      case "lowestUpvotes":
+        sortOptions = { upvotes: 1 };
         break;
       default:
         break;
