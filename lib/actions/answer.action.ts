@@ -1,6 +1,5 @@
 "use server";
 
-import { FilterQuery } from "mongoose";
 import { revalidatePath } from "next/cache";
 
 import { connectToDatabase } from "../mongoose";
