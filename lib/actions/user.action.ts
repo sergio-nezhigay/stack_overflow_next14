@@ -24,7 +24,7 @@ export async function getAllUsers(params: GetAllUsersParams) {
   try {
     connectToDatabase();
 
-    const { searchQuery, filter, page = 1, pageSize = 20 } = params;
+    const { searchQuery, filter, page = 1, pageSize = 5 } = params;
 
     const skipAmount = (page - 1) * pageSize;
 
@@ -239,9 +239,9 @@ export async function getQuestionsByUserId(params: GetUserStatsParams) {
   try {
     connectToDatabase();
 
-    const { userId, page = 1, pageSize = 1 } = params;
+    const { userId, page = 1, pageSize = 10 } = params;
 
-    const skipAmount = (Number(page) - 1) * Number(pageSize);
+    const skipAmount = (page - 1) * pageSize;
 
     const query: FilterQuery<typeof Question> = { author: userId };
 
@@ -250,7 +250,7 @@ export async function getQuestionsByUserId(params: GetUserStatsParams) {
       .populate("tags", "_id name")
       .populate("author", "_id clerkId name picture")
       .skip(skipAmount)
-      .limit(+pageSize);
+      .limit(pageSize);
 
     const totalQuestions = await Question.countDocuments(query);
     const isNext = totalQuestions > skipAmount + questions.length;
@@ -265,9 +265,9 @@ export async function getAnswersByUserId(params: GetUserStatsParams) {
   try {
     connectToDatabase();
 
-    const { userId, page = 1, pageSize = 1 } = params;
+    const { userId, page = 1, pageSize = 5 } = params;
 
-    const skipAmount = (Number(page) - 1) * Number(pageSize);
+    const skipAmount = (page - 1) * pageSize;
 
     const query: FilterQuery<typeof Answer> = { author: userId };
 
@@ -276,7 +276,7 @@ export async function getAnswersByUserId(params: GetUserStatsParams) {
       .populate("author", "_id clerkId name picture")
       .populate("question", "_id title content")
       .skip(skipAmount)
-      .limit(+pageSize);
+      .limit(pageSize);
 
     const totalAnswers = await Answer.countDocuments(query);
     const isNext = totalAnswers > skipAmount + answers.length;

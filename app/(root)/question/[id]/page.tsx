@@ -107,6 +107,7 @@ const Page = async ({ params, searchParams }: URLProps) => {
         filter={searchParams?.filter}
         page={searchParams?.page}
       />
+
       <Answer
         question={result.content}
         questionId={JSON.stringify(result._id)}

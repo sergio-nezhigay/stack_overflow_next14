@@ -19,8 +19,7 @@ const QuestionTab = async ({
 }: QuestionTabProps) => {
   const { questions, isNext } = await getQuestionsByUserId({
     userId,
-    page: searchParams?.page,
-    pageSize: searchParams?.pageSize,
+    page: searchParams.page ? +searchParams.page : 1,
   });
 
   return (
@@ -39,7 +38,13 @@ const QuestionTab = async ({
           createdAt={question.createdAt}
         />
       ))}
-      {isNext && <Pagination />}
+
+      <div className="mt-10">
+        <Pagination
+          pageNumber={searchParams?.page ? +searchParams.page : 1}
+          isNext={isNext}
+        />
+      </div>
     </>
   );
 };

@@ -26,8 +26,8 @@ export interface AnswerVoteParams {
 
 export interface GetQuestionsByIdParams {
   userId: string;
-  page?: string;
-  pageSize?: string;
+  page?: number;
+  pageSize?: number;
 }
 
 export interface DeleteAnswerParams {
