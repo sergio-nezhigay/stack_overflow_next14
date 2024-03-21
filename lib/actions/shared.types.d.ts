@@ -181,3 +181,8 @@ export interface ChangeDownvoteParams {
   hasUpvoted: boolean;
   hasDownvoted: boolean;
 }
+
+export interface GlobalSearchParams {
+  query: string;
+  type: string;
+}
