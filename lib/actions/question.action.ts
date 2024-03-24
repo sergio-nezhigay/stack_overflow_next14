@@ -2,6 +2,7 @@
 
 import { FilterQuery } from "mongoose";
 import { revalidatePath } from "next/cache";
+import error from "next/error";
 
 import { connectToDatabase } from "../mongoose";
 
@@ -168,6 +169,7 @@ export async function createQuestion(params: CreateQuestionParams) {
       content,
       author,
     });
+    console.log("🚀 ~ author:", author);
 
     const tagDocuments = [];
 
@@ -183,8 +185,19 @@ export async function createQuestion(params: CreateQuestionParams) {
     await Question.findByIdAndUpdate(question._id, {
       $push: { tags: { $each: tagDocuments } },
     });
+
+    await User.findOneAndUpdate({ _id: author }, { $inc: { reputation: 5 } });
+    await Interaction.create({
+      user: author,
+      action: "ask_question",
+      question: question._id,
+      tags: tagDocuments,
+    });
+
     revalidatePath(path);
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function toggleSaveQuestion(params: ToggleSaveQuestionParams) {
@@ -246,12 +259,10 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
       throw new Error("Question not found");
     }
 
-    // Increment author's reputation by +1/-1 for upvoting/revoking an upvote to the question
     await User.findByIdAndUpdate(userId, {
       $inc: { reputation: hasupVoted ? -1 : 1 },
     });
 
-    // Increment author's reputation by +10/-10 for recieving an upvote/downvote to the question
     await User.findByIdAndUpdate(question.author, {
       $inc: { reputation: hasupVoted ? -10 : 10 },
     });

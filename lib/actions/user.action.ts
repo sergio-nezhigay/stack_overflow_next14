@@ -246,7 +246,7 @@ export async function getQuestionsByUserId(params: GetUserStatsParams) {
     const query: FilterQuery<typeof Question> = { author: userId };
 
     const questions = await Question.find(query)
-      .sort({ views: -1, upvotes: -1 })
+      .sort({ createdAt: -1, views: -1, upvotes: -1 })
       .populate("tags", "_id name")
       .populate("author", "_id clerkId name picture")
       .skip(skipAmount)

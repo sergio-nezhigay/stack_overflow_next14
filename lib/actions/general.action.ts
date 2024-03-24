@@ -9,8 +9,6 @@ import Question from "@/database/question.model";
 import Tag from "@/database/tag.model";
 import User from "@/database/user.model";
 
-const SearchableTypes = ["question", "answer", "user", "tag"];
-
 export async function globalSearch(params: SearchParams) {
   try {
     await connectToDatabase();
@@ -29,9 +27,10 @@ export async function globalSearch(params: SearchParams) {
 
     const typeLower = type?.toLowerCase();
 
-    if (!typeLower || !SearchableTypes.includes(typeLower)) {
-      // SEARCH ACROSS EVERYTHING
-
+    if (
+      !typeLower ||
+      modelsAndTypes.some((modelAndType) => modelAndType.type === typeLower)
+    ) {
       for (const { model, searchField, type } of modelsAndTypes) {
         const queryResults = await model
           .find({ [searchField]: regexQuery })
@@ -54,7 +53,6 @@ export async function globalSearch(params: SearchParams) {
         );
       }
     } else {
-      // SEARCH IN THE SPECIFIED MODEL TYPE
       const modelInfo = modelsAndTypes.find((item) => item.type === type);
 
       console.log({ modelInfo, type });
