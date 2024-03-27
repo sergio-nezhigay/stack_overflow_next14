@@ -2,7 +2,6 @@
 
 import { FilterQuery } from "mongoose";
 import { revalidatePath } from "next/cache";
-import error from "next/error";
 
 import { connectToDatabase } from "../mongoose";
 
