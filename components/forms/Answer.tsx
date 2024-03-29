@@ -11,6 +11,7 @@ import { z } from "zod";
 import { Button } from "../ui/button";
 import { Form, FormField, FormItem, FormMessage } from "../ui/form";
 
+import { useToast } from "@/components/ui/use-toast";
 import { useTheme } from "@/context/ThemeProvider";
 import { createAnswer } from "@/lib/actions/answer.action";
 import { AnswerSchema } from "@/lib/validations";
@@ -25,6 +26,7 @@ function Answer({ question, questionId, authorId }: Props) {
   const pathname = usePathname();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmittingAI, setIsSubmittingAI] = useState(false);
+  const { toast } = useToast();
   const editorRef = useRef(null);
   const { mode } = useTheme();
   const form = useForm<z.infer<typeof AnswerSchema>>({
@@ -73,8 +75,17 @@ function Answer({ question, questionId, authorId }: Props) {
         const editor = editorRef.current as any;
         editor.setContent(formattedAnswer);
       }
+      toast({
+        title: "AI Answer",
+        description: "AI has successfully generated an answer for you",
+      });
     } catch (error) {
       console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Error AI Answer",
+        description: "Error while generating AI Answer, see the log",
+      });
     } finally {
       setIsSubmittingAI(false);
     }
