@@ -1,8 +1,13 @@
 import React from "react";
 import { auth } from "@clerk/nextjs";
+import { Metadata } from "next";
 
 import Profile from "@/components/forms/Profile";
 import { getUserById } from "@/lib/actions/user.action";
+
+export const metadata: Metadata = {
+  title: "Profile edit | Dev overflowed",
+};
 
 const Page = async () => {
   const { userId } = auth();

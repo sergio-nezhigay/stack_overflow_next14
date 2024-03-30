@@ -1,4 +1,5 @@
 import { auth } from "@clerk/nextjs";
+import { Metadata } from "next";
 
 import QuestionCard from "@/components/cards/QuestionCard";
 import Filter from "@/components/shared/Filter";
@@ -8,6 +9,10 @@ import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
 import { QuestionFilters } from "@/constants/filters";
 import { getSavedQuestions } from "@/lib/actions/question.action";
 import { SearchParamsProps } from "@/types";
+
+export const metadata: Metadata = {
+  title: "Collection | Dev overflowed",
+};
 
 export default async function Collection({ searchParams }: SearchParamsProps) {
   const { userId: clerkId } = auth();

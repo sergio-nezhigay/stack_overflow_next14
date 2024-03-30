@@ -1,3 +1,5 @@
+import { Metadata } from "next";
+
 import UserCard from "@/components/cards/UserCard";
 import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
@@ -6,6 +8,10 @@ import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
 import { UserFilters } from "@/constants/filters";
 import { getAllUsers } from "@/lib/actions/user.action";
 import { SearchParamsProps } from "@/types";
+
+export const metadata: Metadata = {
+  title: "Community | Dev overflowed",
+};
 
 export default async function Home({ searchParams }: SearchParamsProps) {
   const result = await getAllUsers({

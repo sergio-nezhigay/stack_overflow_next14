@@ -1,3 +1,5 @@
+import { Metadata } from "next";
+
 import TagCard from "@/components/cards/TagCard";
 import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
@@ -6,6 +8,10 @@ import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
 import { TagFilters } from "@/constants/filters";
 import { getAllTags } from "@/lib/actions/tag.actions";
 import { SearchParamsProps } from "@/types";
+
+export const metadata: Metadata = {
+  title: "Tags | Dev overflowed",
+};
 
 export default async function Home({ searchParams }: SearchParamsProps) {
   const result = await getAllTags({

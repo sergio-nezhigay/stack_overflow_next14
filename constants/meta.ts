@@ -3,7 +3,7 @@ import { Metadata } from "next";
 const { NEXT_PUBLIC_SERVER_URL = "http://localhost:3000" } = process.env;
 
 const data = {
-  title: "My dev overflowed",
+  title: "Dev overflowed",
   description: "Dev overflow NextJS cloned",
   keywords: "NextJS",
   locale: "en",
