@@ -12,9 +12,6 @@ import { getQuestions } from "@/lib/actions/question.action";
 import { SearchParamsProps } from "@/types";
 
 export default async function Home({ searchParams }: SearchParamsProps) {
-  const developmentMessage =
-    "🚧 This site is in development. Some functions may not be available. Thank you for your understanding! 🚀";
-
   const result = await getQuestions({
     searchQuery: searchParams?.q,
     filter: searchParams?.filter,
@@ -23,9 +20,6 @@ export default async function Home({ searchParams }: SearchParamsProps) {
 
   return (
     <>
-      <p className="mb-3 text-lg font-bold text-red-500">
-        {developmentMessage}
-      </p>
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
         <h1 className="h1-bold text-dark100_light900">All Questions</h1>
 

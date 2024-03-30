@@ -1,4 +1,5 @@
 import { auth } from "@clerk/nextjs";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -12,6 +13,22 @@ import { getQuestionById } from "@/lib/actions/question.action";
 import { getUserById } from "@/lib/actions/user.action";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
 import { URLProps } from "@/types";
+
+type Props = {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const result = await getQuestionById({
+    questionId: params.id,
+  });
+
+  return {
+    title: result?.title,
+    description: result?.content,
+  };
+}
 
 const Page = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth();

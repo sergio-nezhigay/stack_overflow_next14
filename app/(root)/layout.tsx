@@ -1,9 +1,21 @@
 import React from "react";
+import { Metadata, Viewport } from "next";
 
 import LeftSidebar from "@/components/shared/LeftSidebar";
 import Navbar from "@/components/shared/navbar/Navbar";
 import RightSideBar from "@/components/shared/RightSideBar";
 import { Toaster } from "@/components/ui/toaster";
+import meta from "@/constants/meta";
+export const metadata: Metadata = meta;
+
+const viewport: Viewport = {
+  colorScheme: "light",
+  themeColor: "#ffffff",
+  width: "device-width",
+  initialScale: 1,
+};
+
+export { viewport };
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
