@@ -2,7 +2,8 @@
 
 import { connectToDatabase } from "../mongoose";
 
-import { SearchParams } from "./shared.types";
+import { GetAllUsersParams, SearchParams } from "./shared.types";
+import { jobData } from "./test";
 
 import Answer from "@/database/answer.model";
 import Question from "@/database/question.model";
@@ -82,6 +83,29 @@ export async function globalSearch(params: SearchParams) {
     return JSON.stringify(results);
   } catch (error) {
     console.log(`Error fetching global results, ${error}`);
+    throw error;
+  }
+}
+
+export async function getJobs(params: GetAllUsersParams) {
+  const { searchQuery, filter, page = 1, pageSize = 5 } = params;
+  console.log("getJobs", searchQuery, filter, page, pageSize);
+  //  const url = `https://jsearch.p.rapidapi.com/search?query=${searchQuery}&page=1&num_pages=1`;
+  //  const options = {
+  //    method: "GET",
+  //    headers: {
+  //      "X-RapidAPI-Key": process.env.X_RAPID_API_KEY as string,
+  //      "X-RapidAPI-Host": "jsearch.p.rapidapi.com",
+  //    },
+  //  };
+
+  try {
+    // const response = await fetch(url, options);
+    // const result = await response.json();
+
+    return { jobs: jobData.slice(0, 3), isNext: false };
+  } catch (error: any) {
+    console.log(`Error fetching jobs, ${error}`);
     throw error;
   }
 }
