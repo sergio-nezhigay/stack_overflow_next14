@@ -43,10 +43,10 @@ export default async function Jobs({ searchParams }: SearchParamsProps) {
           result.jobs.map((job: any) => <JobCard key={job.job_id} job={job} />)
         ) : (
           <NoResult
-            title="There’s no saved question to show"
-            description="Be the first to break the silence! 🚀 Ask a Question and kickstart the discussion. our query could be the next big thing others learn from. Get involved! 💡"
-            link="/ask-question"
-            linkTitle="Ask a Question"
+            title="There’s no jobs"
+            description="Try to change your request"
+            link="/"
+            linkTitle="Go to main page"
           />
         )}
       </div>

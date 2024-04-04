@@ -19,39 +19,42 @@ interface Props {
 }
 
 function JobCard({ job }: Props) {
-  console.log(job);
-  const salary = job.job_min_salary || "Not disclosed";
+  //  console.log("job", job);
+  const salary = job?.job_min_salary || "Not disclosed";
+  const location =
+    `${job?.job_city ?? ""} ${job?.job_state ?? ""} ${job?.job_country ?? ""}`.trim();
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
       <div className="flex flex-row items-start gap-6">
         <Image
-          src={job.employer_logo}
-          alt={`${job.employer_name} logo`}
+          src={job?.employer_logo || "/assets/images/site-logo.svg"}
+          alt={`${job?.employer_name} employer logo`}
           width={64}
           height={64}
-          className="rounded-xl object-cover"
+          className="size-[64px] rounded-xl object-cover"
         />
+
         <div className="">
           <div className="flex-between flex">
             <h3 className="text-dark200_light900 h3-semibold line-clamp-2">
-              {job.job_title}
+              {job?.job_title}
             </h3>
             <div className="background-light800_dark400 flex shrink-0 items-center justify-end gap-2 rounded-2xl px-3 py-1.5">
               <p className="body-medium text-dark400_light700  hyphens-none">
-                {`${job.job_city} ${job.job_state} ${job.job_country}`}
+                {location}
               </p>
             </div>
           </div>
 
-          <p className="body-regular text-dark500_light700 mt-2 line-clamp-2">
-            {job.job_description}
+          <p className="body-regular text-dark500_light700 mt-2 line-clamp-3">
+            {job?.job_description}
           </p>
           <div className="flex-between mt-8 flex-wrap gap-6">
             <div className="flex gap-6">
               <Metric
                 imgUrl="/assets/icons/clock-2.svg"
                 alt="timeline"
-                value={job.job_employment_type}
+                value={job?.job_employment_type}
                 title=""
                 textStyles="body-medium text-light-500"
               />
@@ -64,7 +67,7 @@ function JobCard({ job }: Props) {
               />
             </div>
             <a
-              href={job.job_apply_link}
+              href={job?.job_apply_link}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2"
