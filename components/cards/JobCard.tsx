@@ -3,6 +3,8 @@ import Image from "next/image";
 
 import Metric from "../shared/Metric";
 
+import { formatDate } from "@/lib/utils";
+
 interface Props {
   job: {
     job_title: string;
@@ -15,26 +17,29 @@ interface Props {
     job_employment_type: string;
     job_min_salary: string;
     job_apply_link: string;
+    job_posted_at_timestamp: string;
   };
 }
 
 function JobCard({ job }: Props) {
-  //  console.log("job", job);
   const salary = job?.job_min_salary || "Not disclosed";
   const location =
     `${job?.job_city ?? ""} ${job?.job_state ?? ""} ${job?.job_country ?? ""}`.trim();
+  const datePosted = formatDate(job.job_posted_at_timestamp);
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
       <div className="flex flex-row items-start gap-6">
-        <Image
-          src={job?.employer_logo || "/assets/images/site-logo.svg"}
-          alt={`${job?.employer_name} employer logo`}
-          width={64}
-          height={64}
-          className="size-[64px] rounded-xl object-cover"
-        />
+        <div className="relative size-[64px]">
+          <Image
+            src={job?.employer_logo || "/assets/images/site-logo.svg"}
+            alt={`${job?.employer_name} employer logo`}
+            fill
+            className="object-contain"
+            sizes="64px"
+          />
+        </div>
 
-        <div className="">
+        <div className="w-full">
           <div className="flex-between flex">
             <h3 className="text-dark200_light900 h3-semibold line-clamp-2">
               {job?.job_title}
@@ -49,6 +54,7 @@ function JobCard({ job }: Props) {
           <p className="body-regular text-dark500_light700 mt-2 line-clamp-3">
             {job?.job_description}
           </p>
+
           <div className="flex-between mt-8 flex-wrap gap-6">
             <div className="flex gap-6">
               <Metric
@@ -62,6 +68,13 @@ function JobCard({ job }: Props) {
                 imgUrl="/assets/icons/currency-dollar-circle.svg"
                 alt="money"
                 value={salary}
+                title=""
+                textStyles="body-medium text-light-500"
+              />
+              <Metric
+                imgUrl="/assets/icons/calendar.svg"
+                alt="date posted"
+                value={datePosted}
                 title=""
                 textStyles="body-medium text-light-500"
               />

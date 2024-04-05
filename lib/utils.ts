@@ -141,3 +141,21 @@ export const assignBadges = (params: BadgeParam) => {
 
   return badgeCounts;
 };
+
+export function formatDate(timestamp: string): string {
+  const parsedTimestamp: number = parseInt(timestamp);
+
+  if (isNaN(parsedTimestamp) || parsedTimestamp <= 0) {
+    return "Invalid timestamp";
+  }
+
+  const date: Date = new Date(parsedTimestamp * 1000);
+  if (isNaN(date.getTime())) {
+    return "Invalid date";
+  }
+
+  const month: string = date.toLocaleString("en-US", { month: "short" });
+  const day: number = date.getDate();
+
+  return `${month} ${day}`;
+}
