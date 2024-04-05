@@ -9,7 +9,7 @@ const data = {
   locale: "en",
 };
 
-const { title, description, keywords, locale } = data;
+const { title, description, keywords } = data;
 
 const meta: Metadata = {
   title,
@@ -18,15 +18,6 @@ const meta: Metadata = {
   metadataBase: new URL(NEXT_PUBLIC_SERVER_URL as string),
   alternates: {
     canonical: NEXT_PUBLIC_SERVER_URL as string,
-  },
-  manifest: "/meta/site.webmanifest",
-  openGraph: {
-    title,
-    description,
-    url: NEXT_PUBLIC_SERVER_URL as string,
-    siteName: title,
-    locale,
-    type: "website",
   },
   twitter: {
     title,

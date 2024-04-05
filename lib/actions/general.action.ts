@@ -104,13 +104,13 @@ export async function getJobs(params: GetAllUsersParams) {
     const response = await fetch(url, options);
     const result = await response.json();
     if (result.status !== "OK") {
-      throw new Error(`Failed to fetch jobs: ${result}`);
+      throw new Error(`Failed to fetch job results: ${result}`);
     }
 
     // return { jobs: jobData, isNext: true };
     return { jobs: result.data, isNext: true };
   } catch (error: any) {
-    console.log(`Error fetching jobs, ${error}`);
-    throw error;
+    console.log(`Error fetching jobs, at url ${url}: ${error}`);
+    throw new Error(`Error fetching jobs: ${error}`);
   }
 }

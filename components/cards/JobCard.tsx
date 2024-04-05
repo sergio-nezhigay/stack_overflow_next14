@@ -25,7 +25,7 @@ function JobCard({ job }: Props) {
   const salary = job?.job_min_salary || "Not disclosed";
   const location =
     `${job?.job_city ?? ""} ${job?.job_state ?? ""} ${job?.job_country ?? ""}`.trim();
-  const datePosted = formatDate(job.job_posted_at_timestamp);
+  const datePosted = formatDate(job?.job_posted_at_timestamp);
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
       <div className="flex flex-row items-start gap-6">
