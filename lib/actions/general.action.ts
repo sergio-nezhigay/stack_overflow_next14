@@ -88,9 +88,14 @@ export async function globalSearch(params: SearchParams) {
 
 export async function getJobs(params: GetAllUsersParams) {
   const defaultSearch = "react%20developer";
-  const { searchQuery = defaultSearch, page = 1 } = params;
+  const { searchQuery = defaultSearch, page = 1, filter } = params;
+  const pagesize = 10;
 
-  const url = `https://jsearch.p.rapidapi.com/search?query=${searchQuery}&page=${page}&num_pages=1&remote_jobs_only=true&job_requirements=no_experience&date_posted=week`;
+  const searchTail = filter
+    ? `&employment_type=${filter}`
+    : `&job_requirements=no_experience`;
+
+  const url = `https://jsearch.p.rapidapi.com/search?query=${searchQuery}&page=${page}&num_pages=1&remote_jobs_only=true&date_posted=week${searchTail}`;
 
   const options = {
     method: "GET",
@@ -106,9 +111,9 @@ export async function getJobs(params: GetAllUsersParams) {
     if (result.status !== "OK") {
       throw new Error(`Failed to fetch job results: ${result}`);
     }
-
+    const isNext = result.data.length >= pagesize;
     // return { jobs: jobData, isNext: true };
-    return { jobs: result.data, isNext: true };
+    return { jobs: result.data, isNext };
   } catch (error: any) {
     console.log(`Error fetching jobs, at url ${url}: ${error}`);
     throw new Error(`Error fetching jobs: ${error}`);

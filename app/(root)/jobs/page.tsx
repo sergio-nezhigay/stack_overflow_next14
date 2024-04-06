@@ -5,7 +5,7 @@ import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
 import Pagination from "@/components/shared/Pagination";
 import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
-import { QuestionFilters } from "@/constants/filters";
+import { JobFilters } from "@/constants/filters";
 import { getJobs } from "@/lib/actions/general.action";
 import { SearchParamsProps } from "@/types";
 
@@ -33,7 +33,7 @@ export default async function Jobs({ searchParams }: SearchParamsProps) {
           otherClasses="flex-1"
         />
         <Filter
-          filters={QuestionFilters}
+          filters={JobFilters}
           otherClasses="min-h-[56px] sm:min-w-[170px]"
         />
       </div>

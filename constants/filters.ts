@@ -19,6 +19,13 @@ export const QuestionFilters = [
   { name: "Most Answered", value: "most_answered" },
 ];
 
+export const JobFilters = [
+  { name: "Fulltime", value: "FULLTIME" },
+  { name: "Contractor", value: "CONTRACTOR" },
+  { name: "Parttime", value: "PARTTIME" },
+  { name: "Intern", value: "INTERN" },
+];
+
 export const TagFilters = [
   { name: "Popular", value: "popular" },
   { name: "Recent", value: "recent" },
