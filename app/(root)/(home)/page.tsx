@@ -17,7 +17,7 @@ import {
 import { SearchParamsProps } from "@/types";
 
 export const metadata: Metadata = {
-  title: "Home | Dev overflowed",
+  title: "Home | Dev overflow",
 };
 
 export default async function Home({ searchParams }: SearchParamsProps) {
